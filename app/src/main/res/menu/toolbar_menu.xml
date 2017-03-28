@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.activity.MainActivity" >
+    <item
+        android:id="@+id/movie_search"
+        android:orderInCategory="60"
+        android:title="action_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/send_custom_notification"
+        android:icon="@drawable/menu_more"
+        android:title=""
+        app:showAsAction="always"
+        android:orderInCategory="61">
+        <menu>
+            <item
+                android:id="@+id/clear_collection"
+                android:title="扫一扫"/>
+            <item
+                android:id="@+id/close_lock"
+                android:title="快传"/>
+            <item
+                android:id="@+id/open_lock"
+                android:title="应用锁"/>
+        </menu>
+    </item>
+</menu>
