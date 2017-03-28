@@ -20,7 +20,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/NoTitleBarTheme">
-
         <meta-data
             android:name="sms_app_key"
             android:value="f48c49b37b60" />
@@ -29,12 +28,12 @@
             android:value="d953d34d33e672460174961e63687304" />
 
         <activity android:name=".view.activity.MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".view.activity.common.SearchActivity" />
@@ -55,10 +54,12 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.activity.common.CollectionActivity"></activity>
     </application>
 
 </manifest>

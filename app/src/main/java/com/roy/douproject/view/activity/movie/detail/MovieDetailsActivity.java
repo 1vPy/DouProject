@@ -12,11 +12,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.roy.douproject.R;
+import com.roy.douproject.bean.collection.MovieCollection;
 import com.roy.douproject.bean.movie.JsonMovieBean;
 import com.roy.douproject.bean.movie.star.JsonStarBean;
 import com.roy.douproject.datainterface.movie.MovieInterface;
+import com.roy.douproject.db.manager.DBManager;
 import com.roy.douproject.presenter.movie.MoviePresenter;
 import com.roy.douproject.view.activity.common.WebViewActivity;
 import com.roy.douproject.view.activity.movie.star.StarDetailsActivity;
@@ -32,7 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/3/2.
+ * 显示电影详情的activity
+ * Created by 1vPy(Roy) on 2017/3/2.
  */
 
 public class MovieDetailsActivity extends AppCompatActivity implements MovieInterface {
@@ -44,6 +48,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
 
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
+    private ImageView collect;
 
     private ImageView movie_poster;
     private TextView movie_title;
@@ -62,11 +67,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
     private RecyclerView movie_directors;
     private RecyclerView movie_stars;
 
-
     private MovieDirectorsRecyclerAdapter mMovieDirectorsRecyclerAdapter;
     private MovieStarsRecyclerAdapter mMovieStarsRecyclerAdapter;
 
     private MoviePresenter moviePresenter = new MoviePresenter(this);
+
+    private boolean isCollected = false;
+    private List<MovieCollection> movieCollectionList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +82,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
         progressDialog = new ProgressDialog(MovieDetailsActivity.this);
         progressDialog.show();
         init();
+        movieCollectionList = DBManager.getInstance(this).searchCollection();
+        if(movieCollectionList != null){
+            for(MovieCollection movieCollection : movieCollectionList){
+                LogUtils.log(TAG,movieCollection.getMovieName(),LogUtils.DEBUG);
+            }
+        }
     }
 
     private void init() {
@@ -86,8 +99,25 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
         if (movieId != null) {
             moviePresenter.getMovieDetail(movieId);
         }
+
+        initEvent();
     }
 
+    /**
+     * 设置收藏按钮点击事件
+     * 判断当前电影是否已收藏(设置对应的图标)
+     */
+    private void initEvent(){
+        collect.setOnClickListener(clickListener);
+        if(DBManager.getInstance(this).searchCollectionByMovieId(movieId) != null){
+            collect.setBackgroundResource(R.drawable.star_full);
+            isCollected = true;
+        }
+    }
+
+    /**
+     * 设置toolbar
+     */
     private void initToolBar() {
         //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
         //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
@@ -102,8 +132,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
         });
     }
 
+    /**
+     * 初始化控件
+     */
     private void findView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        collect = (ImageView) findViewById(R.id.collect);
+
+
         movie_poster = (ImageView) findViewById(R.id.movie_poster);
         movie_title = (TextView) findViewById(R.id.movie_title);
         movie_original_title = (TextView) findViewById(R.id.movie_original_title);
@@ -133,6 +169,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
         movie_stars.setAdapter(mMovieStarsRecyclerAdapter);
     }
 
+    /**
+     * 设置数据
+     */
     private void initData() {
         toolbar.setTitle(mJsonDetailBean.getTitle());
         ImageUtils.newInstance().displayImage(MovieDetailsActivity.this, mJsonDetailBean.getImages().getLarge(), movie_poster);
@@ -206,6 +245,41 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
         progressDialog.dismiss();
     }
 
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.collect:
+                    if(isCollected){
+                        unCollect();
+                    }else{
+                        collect();
+                    }
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 收藏
+     */
+    private void collect(){
+        DBManager.getInstance(MovieDetailsActivity.this).insertCollection(mJsonDetailBean);
+        collect.setBackgroundResource(R.drawable.star_full);
+        isCollected = true;
+        Toast.makeText(MovieDetailsActivity.this,getString(R.string.collect_succeed),Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * 取消收藏
+     */
+    private void unCollect(){
+        DBManager.getInstance(MovieDetailsActivity.this).deleteCollectionByMovieId(movieId);
+        collect.setBackgroundResource(R.drawable.star_empty);
+        isCollected = false;
+        Toast.makeText(MovieDetailsActivity.this,getString(R.string.collect_deleted),Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void getMovieSucceed(JsonMovieBean jsonMovieBean) {
 
@@ -231,5 +305,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
     @Override
     public void getError(Throwable throwable) {
         LogUtils.log(TAG, throwable, LogUtils.DEBUG);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DBManager.getInstance(MovieDetailsActivity.this).closeDB();
     }
 }

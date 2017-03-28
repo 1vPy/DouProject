@@ -111,6 +111,7 @@ public class ComingMovieFragment extends Fragment implements MovieInterface {
         } else {
             if (isLoadMore) {
                 isLoadMore = false;
+                LogUtils.log(TAG, "currentSize:" + mSubjectsList.size() + ",total:" + jsonMovieBean.getTotal(), LogUtils.DEBUG);
                 if (mSubjectsList.size() >= jsonMovieBean.getTotal()) {
                     canLoadMore = false;
                 }
@@ -204,11 +205,9 @@ public class ComingMovieFragment extends Fragment implements MovieInterface {
             } else {
 /*                mSubjectsList.add(null);
                 mComingMovieRecyclerAdapter.notifyDataSetChanged();*/
+                mComingMovieRecyclerAdapter.setLoaded();
+                Toast.makeText(getActivity(),getString(R.string.no_more),Toast.LENGTH_LONG).show();
             }
         }
     };
-
-/*    private int canLoadPageSize() {
-        return DEFAULT_PAGE + 1;
-    }*/
 }

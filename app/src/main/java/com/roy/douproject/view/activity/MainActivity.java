@@ -189,17 +189,17 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                 switch (menuItem.getItemId()) {
-                    case R.id.nav_menu_home:
-                        break;
-                    case R.id.nav_menu_categories:
-                        break;
+/*                    case R.id.nav_menu_home:
+                        break;*/
                     case R.id.nav_menu_recommend:
+                        break;
+                    case R.id.nav_menu_collection:
+                        break;
+                    case R.id.nav_menu_theme:
                         break;
                     case R.id.nav_menu_feedback:
                         break;
-                    case R.id.nav_menu_setting:
-                        break;
-                    case R.id.nav_menu_theme:
+                    case R.id.nav_menu_about:
                         break;
                 }
 

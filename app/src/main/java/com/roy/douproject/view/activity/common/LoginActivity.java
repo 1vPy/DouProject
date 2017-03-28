@@ -208,6 +208,12 @@ public class LoginActivity extends AppCompatActivity {
                             register_username_tip.setText(results.getResult());
                         }
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //Toast.makeText(LoginActivity.this,)
+                        LogUtils.log(TAG,"checkUserError:"+throwable.getLocalizedMessage(),LogUtils.DEBUG);
+                    }
                 });
 
         RxTextView.textChanges(register_confirm_password)

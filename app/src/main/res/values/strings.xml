@@ -22,4 +22,13 @@
     <string name="loading">正在加载</string>
     <string name="recent_hit">最近热播</string>
     <string name="coming_soon">即将上映</string>
+    <string name="back_top">回到主页</string>
+    <string name="recommend">电影推荐</string>
+    <string name="local_collection">本地收藏</string>
+    <string name="theme_set">主题设置</string>
+    <string name="feedback">问题反馈</string>
+    <string name="about">关于</string>
+    <string name="collect_succeed">收藏成功</string>
+    <string name="collect_deleted">收藏删除</string>
+    <string name="no_more">没有更多了</string>
 </resources>

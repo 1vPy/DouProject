@@ -33,6 +33,7 @@ public class ImageUtils {
                 .load(url)
                 .placeholder(R.drawable.default_image)
                 .error(R.drawable.default_image)
+                .dontAnimate()
                 .into(imageView);
     }
 
@@ -41,6 +42,7 @@ public class ImageUtils {
                 .load(resId)
                 .placeholder(R.drawable.default_image)
                 .error(R.drawable.default_image)
+                .dontAnimate()
                 .into(imageView);
     }
 
@@ -49,6 +51,7 @@ public class ImageUtils {
                 .load(url)
                 .placeholder(R.drawable.default_image)
                 .error(R.drawable.default_image)
+                .dontAnimate()
                 .bitmapTransform(new CropCircleTransformation(context))
                 .into(imageView);
     }
@@ -58,6 +61,7 @@ public class ImageUtils {
                 .load(resId)
                 .placeholder(R.drawable.default_image)
                 .error(R.drawable.default_image)
+                .dontAnimate()
                 .bitmapTransform(new CropCircleTransformation(context))
                 .into(imageView);
     }
