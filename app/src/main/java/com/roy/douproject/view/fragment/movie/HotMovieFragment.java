@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -117,5 +118,13 @@ public class HotMovieFragment extends Fragment implements MovieInterface{
                 moviePresenter.getHotMovie(0);
             }
         });
+    }
+
+    public void scrollToTop(){
+        if(((GridLayoutManager)(movie_recyclerView.getLayoutManager())).findLastVisibleItemPosition()>30){
+            movie_recyclerView.scrollToPosition(0);
+        }else{
+            movie_recyclerView.smoothScrollToPosition(0);
+        }
     }
 }

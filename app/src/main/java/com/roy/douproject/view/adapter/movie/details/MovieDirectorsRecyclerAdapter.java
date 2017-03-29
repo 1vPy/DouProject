@@ -55,9 +55,9 @@ public class MovieDirectorsRecyclerAdapter extends RecyclerView.Adapter<MovieDir
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         if(mDirectorsList.get(position).getAvatars() != null){
-            ImageUtils.newInstance().displayImage(mContext,mDirectorsList.get(position).getAvatars().getLarge(),holder.director_image);
+            ImageUtils.getInstance().displayImage(mContext,mDirectorsList.get(position).getAvatars().getLarge(),holder.director_image);
         }else{
-            ImageUtils.newInstance().displayImage(mContext,null,holder.director_image);
+            ImageUtils.getInstance().displayImage(mContext,null,holder.director_image);
         }
 
         holder.director_name.setText(mDirectorsList.get(position).getName());

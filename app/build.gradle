@@ -25,8 +25,8 @@ android {
     }
 }
 
-repositories{
-    flatDir{
+repositories {
+    flatDir {
         dirs 'libs' //就是你放aar的目录地址
     }
 }
@@ -53,4 +53,7 @@ dependencies {
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     compile name: 'SMSSDK-2.1.1', ext: 'aar'
     compile 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
+    compile 'com.zaaach:toprightmenu:1.0'
+    compile 'com.github.michaldrabik:tapbarmenu:1.0.5'
+    compile project(':library')
 }

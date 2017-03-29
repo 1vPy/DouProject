@@ -20,7 +20,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.michaldrabik.tapbarmenulib.TapBarMenu;
 import com.roy.douproject.R;
+import com.roy.douproject.view.activity.common.CollectionActivity;
 import com.roy.douproject.view.activity.common.LoginActivity;
 import com.roy.douproject.view.adapter.DouBaseFragmentAdapter;
 import com.roy.douproject.view.fragment.MovieFragment;
@@ -49,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private MovieFragment mMovieFragment;
 
     private SearchView searchView;
+
+    private TapBarMenu tapBarMenu;
+    private ImageView back_to_top;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setting = (Button) findViewById(R.id.setting);
         personal_center = (Button) findViewById(R.id.personsl_center);
+
+        tapBarMenu = (TapBarMenu) findViewById(R.id.tapBarMenu);
+        back_to_top = (ImageView) findViewById(R.id.back_to_top);
     }
 
     private void initView() {
@@ -99,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         user_header = (ImageView) navigationView_main.getHeaderView(0).findViewById(R.id.user_header);
-        ImageUtils.newInstance().displayCircleImage(MainActivity.this, R.drawable.user_header, user_header);
+        ImageUtils.getInstance().displayCircleImage(MainActivity.this, R.drawable.user_header, user_header);
 
 
         // 设置Drawerlayout开关指示器，即Toolbar最左边的那个icon
@@ -111,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFragment() {
-        mFragmentList.add(MovieFragment.newInstance());
+        mMovieFragment = MovieFragment.newInstance();
+        mFragmentList.add(mMovieFragment);
         mDouBaseFragmentAdapter = new DouBaseFragmentAdapter(getSupportFragmentManager(), mTitleList, mFragmentList);
         viewPager.setAdapter(mDouBaseFragmentAdapter);
         viewPager.setOffscreenPageLimit(3);
@@ -120,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
     private void initEvent() {
         LogUtils.log(TAG, "iniEvent", LogUtils.DEBUG);
         personal_center.setOnClickListener(clickListener);
+        tapBarMenu.setOnClickListener(clickListener);
+        back_to_top.setOnClickListener(clickListener);
 /*        RxSearchView.queryTextChanges(searchView)
                 .debounce(2, TimeUnit.SECONDS)
                 .flatMap(new Function<CharSequence, Observable<JsonMovieBean>>() {
@@ -174,6 +185,13 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.personsl_center:
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     break;
+                case R.id.tapBarMenu:
+                    tapBarMenu.toggle();
+                    break;
+                case R.id.back_to_top:
+                    mMovieFragment.backToTop();
+                    tapBarMenu.close();
+                    break;
             }
         }
     };
@@ -194,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_menu_recommend:
                         break;
                     case R.id.nav_menu_collection:
+                        startActivity(new Intent(MainActivity.this, CollectionActivity.class));
                         break;
                     case R.id.nav_menu_theme:
                         break;

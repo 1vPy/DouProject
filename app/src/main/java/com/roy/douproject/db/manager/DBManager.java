@@ -42,6 +42,7 @@ public class DBManager {
 
     /**
      * 插入一条收藏
+     *
      * @param jsonDetailBean
      */
     public void insertCollection(JsonDetailBean jsonDetailBean) {
@@ -49,10 +50,10 @@ public class DBManager {
         String type = "";
         String stars = "";
         for (String s : jsonDetailBean.getGenres()) {
-            type = type + s + "";
+            type = type + s + " ";
         }
         for (Casts casts : jsonDetailBean.getCasts()) {
-            stars = stars + casts.getName() + "";
+            stars = stars + casts.getName() + " ";
         }
         db.execSQL("insert into tb_collection values(null,?,?,?,?)", new Object[]{jsonDetailBean.getTitle(), type, stars, jsonDetailBean.getId()});
         db.setTransactionSuccessful();
@@ -61,6 +62,7 @@ public class DBManager {
 
     /**
      * 查询所有收藏
+     *
      * @return List<MovieCollection>
      */
     public List<MovieCollection> searchCollection() {
@@ -69,7 +71,7 @@ public class DBManager {
         if (cursor.getCount() == 0) {
             return null;
         }
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             MovieCollection movieCollection = new MovieCollection();
             movieCollection.setId(cursor.getInt(cursor.getColumnIndex("id")));
             movieCollection.setMovieName(cursor.getString(cursor.getColumnIndex("movieName")));
@@ -85,6 +87,7 @@ public class DBManager {
 
     /**
      * 根据电影id查询电影简介
+     *
      * @param movieId 电影Id
      * @return MovieCollection
      */
@@ -94,7 +97,7 @@ public class DBManager {
         if (cursor.getCount() == 0) {
             return null;
         }
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             movieCollection.setId(cursor.getInt(cursor.getColumnIndex("id")));
             movieCollection.setMovieName(cursor.getString(cursor.getColumnIndex("movieName")));
             movieCollection.setMovieType(cursor.getString(cursor.getColumnIndex("movieType")));
@@ -117,6 +120,7 @@ public class DBManager {
 
     /**
      * 根据电影id删除收藏
+     *
      * @param movieId 电影Id
      */
     public void deleteCollectionByMovieId(String movieId) {

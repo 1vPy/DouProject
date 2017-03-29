@@ -64,7 +64,7 @@ public class HotMovieRecyclerAdapter extends RecyclerView.Adapter<HotMovieRecycl
         params.height=(int)height;
         holder.hotmovie_image.setLayoutParams(params);
         //Glide.with(mContext).load(mSubjectsList.get(position).getImages().getLarge()).into(holder.hotmovie_image);
-        ImageUtils.newInstance().displayImage(mContext,mSubjectsList.get(position).getImages().getLarge(),holder.hotmovie_image);
+        ImageUtils.getInstance().displayImage(mContext,mSubjectsList.get(position).getImages().getLarge(),holder.hotmovie_image);
         holder.hotmovie_name.setText(mSubjectsList.get(position).getTitle());
         if(TextUtils.isEmpty(mSubjectsList.get(position).getRating().getAverage()+"")){
             holder.hotmovie_average.setText("暂无评分");

@@ -54,9 +54,9 @@ public class MovieStarsRecyclerAdapter extends RecyclerView.Adapter<MovieStarsRe
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         if(mCastsList.get(position).getAvatars() != null){
-            ImageUtils.newInstance().displayImage(mContext,mCastsList.get(position).getAvatars().getLarge(),holder.star_image);
+            ImageUtils.getInstance().displayImage(mContext,mCastsList.get(position).getAvatars().getLarge(),holder.star_image);
         }else{
-            ImageUtils.newInstance().displayImage(mContext,null,holder.star_image);
+            ImageUtils.getInstance().displayImage(mContext,null,holder.star_image);
         }
         holder.star_name.setText(mCastsList.get(position).getName());
         holder.star_root.setOnClickListener(new ClickListener(holder.star_root,position));

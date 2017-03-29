@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -85,6 +86,7 @@ public class ComingMovieFragment extends Fragment implements MovieInterface {
         mComingMovieRecyclerAdapter = new ComingMovieRecyclerAdapter(getActivity(), mSubjectsList);
         movie_recyclerView.setAdapter(mComingMovieRecyclerAdapter);
         mComingMovieRecyclerAdapter.setOnRecyclerViewItemClickListener(recyclerViewItemClickListener);
+
         mComingMovieRecyclerAdapter.setOnRecyclerViewLoadMoreListener(movie_recyclerView, recyclerViewLoadMoreListener);
 
         comingmovie_refresh.setColorSchemeColors(getResources().getColor(android.R.color.holo_blue_bright), getResources().getColor(android.R.color.holo_green_light),
@@ -210,4 +212,12 @@ public class ComingMovieFragment extends Fragment implements MovieInterface {
             }
         }
     };
+
+    public void scrollToTop(){
+        if(((LinearLayoutManager)(movie_recyclerView.getLayoutManager())).findLastVisibleItemPosition()>30){
+            movie_recyclerView.scrollToPosition(0);
+        }else{
+            movie_recyclerView.smoothScrollToPosition(0);
+        }
+    }
 }

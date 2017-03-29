@@ -30,11 +30,14 @@ import com.roy.douproject.widget.SpacesItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
+
 /**
  * Created by Administrator on 2017/3/13.
  */
 
-public class StarDetailsActivity extends AppCompatActivity implements MovieInterface{
+public class StarDetailsActivity extends SwipeBackActivity implements MovieInterface{
     private static final String TAG = StarDetailsActivity.class.getSimpleName();
     private String starId;
     private JsonStarBean mJsonStarBean;
@@ -54,12 +57,16 @@ public class StarDetailsActivity extends AppCompatActivity implements MovieInter
     private List<Works> mWorksList = new ArrayList<>();
     private MoviePresenter moviePresenter = new MoviePresenter(this);
 
+    private SwipeBackLayout mSwipeBackLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stardetail);
         progressDialog = new ProgressDialog(StarDetailsActivity.this);
         progressDialog.show();
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
         init();
     }
 
@@ -108,7 +115,7 @@ public class StarDetailsActivity extends AppCompatActivity implements MovieInter
 
     private void initData(){
         toolbar.setTitle(mJsonStarBean.getName());
-        ImageUtils.newInstance().displayImage(StarDetailsActivity.this,mJsonStarBean.getAvatars().getLarge(),star_image);
+        ImageUtils.getInstance().displayImage(StarDetailsActivity.this,mJsonStarBean.getAvatars().getLarge(),star_image);
         star_name.setText("中文名："+mJsonStarBean.getName());
         star_en_name.setText("英文名："+mJsonStarBean.getName_en());
         star_gender.setText("性别："+mJsonStarBean.getGender());

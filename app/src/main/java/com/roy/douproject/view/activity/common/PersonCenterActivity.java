@@ -13,20 +13,29 @@ import android.widget.TextView;
 import com.roy.douproject.R;
 import com.roy.douproject.utils.image.ImageUtils;
 
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
+
 /**
  * Created by Administrator on 2017/3/23.
  */
 
-public class PersonCenterActivity extends AppCompatActivity{
+public class PersonCenterActivity extends SwipeBackActivity {
     private Toolbar toolbar;
     private RelativeLayout user_info_setting;
     private ImageView user_header_img;
     private TextView user_name;
 
+    private SwipeBackLayout mSwipeBackLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personcenter);
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
+
         init();
     }
 
@@ -63,7 +72,7 @@ public class PersonCenterActivity extends AppCompatActivity{
     }
 
     private void initData(){
-        ImageUtils.newInstance().displayCircleImage(PersonCenterActivity.this,R.drawable.user_header,user_header_img);
+        ImageUtils.getInstance().displayCircleImage(PersonCenterActivity.this,R.drawable.user_header,user_header_img);
         //user_header_img.setBackgroundResource(R.drawable.user_header);
     }
 

@@ -12,9 +12,13 @@ public class JsonUtils {
 
     }
 
-    public static synchronized JsonUtils newInstance(){
+    public static JsonUtils getInstance(){
         if(instance == null){
-            instance = new JsonUtils();
+            synchronized(JsonUtils.class){
+                if(instance == null){
+                    instance = new JsonUtils();
+                }
+            }
         }
         return instance;
     }

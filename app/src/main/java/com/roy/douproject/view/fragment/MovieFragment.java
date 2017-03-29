@@ -1,5 +1,6 @@
 package com.roy.douproject.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -7,8 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.michaldrabik.tapbarmenulib.TapBarMenu;
 import com.roy.douproject.R;
+import com.roy.douproject.view.activity.MainActivity;
+import com.roy.douproject.view.activity.common.LoginActivity;
 import com.roy.douproject.view.adapter.DouBaseFragmentAdapter;
 import com.roy.douproject.view.fragment.movie.ComingMovieFragment;
 import com.roy.douproject.view.fragment.movie.HotMovieFragment;
@@ -28,6 +33,9 @@ public class MovieFragment extends Fragment {
     private List<String> mTitleList = new ArrayList<>();
     private List<Fragment> mFragmentList = new ArrayList<>();
 
+    private HotMovieFragment mHotMovieFragment;
+    private ComingMovieFragment mComingMovieFragment;
+
     public static MovieFragment newInstance() {
         Bundle args = new Bundle();
         MovieFragment fragment = new MovieFragment();
@@ -45,14 +53,18 @@ public class MovieFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         findView();
+        initEvent();
         initData();
     }
 
     private void findView(){
         movie_tablayout = (TabLayout) getActivity().findViewById(R.id.movie_tablayout);
         viewPager = (ViewPager) getActivity().findViewById(R.id.movie_viewpager);
-        mFragmentList.add(HotMovieFragment.newInstance());
-        mFragmentList.add(ComingMovieFragment.newInstance());
+        mHotMovieFragment = HotMovieFragment.newInstance();
+        mComingMovieFragment = ComingMovieFragment.newInstance();
+
+        mFragmentList.add(mHotMovieFragment);
+        mFragmentList.add(mComingMovieFragment);
         mTitleList.add(getString(R.string.recent_hit));
         mTitleList.add(getString(R.string.coming_soon));
         mTitleList.add("高分电影");
@@ -75,5 +87,20 @@ public class MovieFragment extends Fragment {
 
     private void initData(){
         //DouMovieFactory.newInstance().createApi().getMovieListByQuery("西游",1);
+    }
+
+    private void initEvent(){
+
+    }
+
+    public void backToTop(){
+        switch (viewPager.getCurrentItem()){
+            case 0:
+                mHotMovieFragment.scrollToTop();
+                break;
+            case 1:
+                mComingMovieFragment.scrollToTop();
+                break;
+        }
     }
 }

@@ -39,6 +39,19 @@ public class ScreenUtils {
         int width = wm.getDefaultDisplay().getWidth();
         return width;
     }
+
+    /**
+     * 获取屏幕的高度
+     * @param context
+     * @return
+     */
+    public static  int getScreenHeightDp(Context context){
+        WindowManager wm = (WindowManager)
+                context.getSystemService(Context.WINDOW_SERVICE);
+
+        int height = wm.getDefaultDisplay().getHeight();
+        return height;
+    }
     /**
      * dip 转px
      * @param context

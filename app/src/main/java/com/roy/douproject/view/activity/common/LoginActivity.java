@@ -40,12 +40,14 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**
  * Created by Administrator on 2017/3/16.
  */
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends SwipeBackActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
     private User user;
     private boolean login_mode = true;
@@ -78,11 +80,15 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean canUsername = false;
 
+    private SwipeBackLayout mSwipeBackLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
         initView();
         initToolBar();
         initEvent();
@@ -413,7 +419,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
-                    Toast.makeText(LoginActivity.this, SmsErrorUtils.getErrorMsg(JsonUtils.newInstance().Json2JavaBean(((Throwable) msg.obj).getLocalizedMessage(), SmsResults.class).getStatus()), Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, SmsErrorUtils.getErrorMsg(JsonUtils.getInstance().Json2JavaBean(((Throwable) msg.obj).getLocalizedMessage(), SmsResults.class).getStatus()), Toast.LENGTH_LONG).show();
                     break;
             }
 

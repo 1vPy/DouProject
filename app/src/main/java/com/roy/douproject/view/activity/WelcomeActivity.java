@@ -29,8 +29,8 @@ public class WelcomeActivity extends Activity {
             }
         },3000);
         welcome_pic = (ImageView) findViewById(R.id.welcome_pic);
-        //ImageUtils.newInstance().displayImage(WelcomeActivity.this,pics[(int)(Math.random()*pics.length)],welcome_pic);
-        welcome_pic.setImageResource(pics[(int)(Math.random()*pics.length)]);
+        ImageUtils.getInstance().displayImage(WelcomeActivity.this,pics[(int)(Math.random()*pics.length)],welcome_pic);
+        //welcome_pic.setImageResource(pics[(int)(Math.random()*pics.length)]);
     }
 
     @Override

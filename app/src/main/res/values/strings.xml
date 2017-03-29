@@ -31,4 +31,5 @@
     <string name="collect_succeed">收藏成功</string>
     <string name="collect_deleted">收藏删除</string>
     <string name="no_more">没有更多了</string>
+    <string name="list_empty">您的列表空空如也，快去收藏电影吧~</string>
 </resources>

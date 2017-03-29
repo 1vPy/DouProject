@@ -29,12 +29,14 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**
  * Created by Administrator on 2017/3/17.
  */
 
-public class SearchActivity extends AppCompatActivity implements MovieInterface{
+public class SearchActivity extends SwipeBackActivity implements MovieInterface{
     private static final String TAG = SearchActivity.class.getSimpleName();
     private Toolbar toolbar;
     private ListView search_result;
@@ -46,10 +48,15 @@ public class SearchActivity extends AppCompatActivity implements MovieInterface{
     private String query;
     private MoviePresenter moviePresenter = new MoviePresenter(this);
 
+    private SwipeBackLayout mSwipeBackLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
         init();
         dealSearch();
     }

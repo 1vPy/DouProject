@@ -103,7 +103,7 @@ public class ComingMovieRecyclerAdapter extends RecyclerView.Adapter {
             params.height = (int) height;
             ((ItemViewHolder) holder).comingmovie_image.setLayoutParams(params);
             //Glide.with(mContext).load(mSubjectsList.get(position).getImages().getLarge()).into(holder.comingmovie_image);
-            ImageUtils.newInstance().displayImage(mContext, mSubjectsList.get(position).getImages().getLarge(), ((ItemViewHolder) holder).comingmovie_image);
+            ImageUtils.getInstance().displayImage(mContext, mSubjectsList.get(position).getImages().getLarge(), ((ItemViewHolder) holder).comingmovie_image);
             ((ItemViewHolder) holder).comingmovie_name.setText(mSubjectsList.get(position).getTitle());
 
             String type = "";

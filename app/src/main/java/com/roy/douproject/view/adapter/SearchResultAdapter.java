@@ -58,7 +58,7 @@ public class SearchResultAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageUtils.newInstance().displayImage(mContext, mSubjectsList.get(position).getImages().getLarge(), holder.search_image);
+        ImageUtils.getInstance().displayImage(mContext, mSubjectsList.get(position).getImages().getLarge(), holder.search_image);
         holder.search_name.setText(mSubjectsList.get(position).getTitle());
         String type = "";
         for (String s : mSubjectsList.get(position).getGenres()) {

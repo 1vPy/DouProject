@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.roy.douproject.bean.movie.star.JsonStarBean;
 import com.roy.douproject.datainterface.movie.MovieInterface;
 import com.roy.douproject.db.manager.DBManager;
 import com.roy.douproject.presenter.movie.MoviePresenter;
+import com.roy.douproject.utils.common.ToastUtils;
 import com.roy.douproject.view.activity.common.WebViewActivity;
 import com.roy.douproject.view.activity.movie.star.StarDetailsActivity;
 import com.roy.douproject.view.adapter.movie.details.MovieDirectorsRecyclerAdapter;
@@ -34,12 +36,15 @@ import com.roy.douproject.utils.image.ImageUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
+
 /**
  * 显示电影详情的activity
  * Created by 1vPy(Roy) on 2017/3/2.
  */
 
-public class MovieDetailsActivity extends AppCompatActivity implements MovieInterface {
+public class MovieDetailsActivity extends SwipeBackActivity implements MovieInterface {
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
     private String movieId;
     private JsonDetailBean mJsonDetailBean;
@@ -75,12 +80,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
     private boolean isCollected = false;
     private List<MovieCollection> movieCollectionList = new ArrayList<>();
 
+    private SwipeBackLayout mSwipeBackLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moviedetails);
         progressDialog = new ProgressDialog(MovieDetailsActivity.this);
         progressDialog.show();
+        mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
         init();
         movieCollectionList = DBManager.getInstance(this).searchCollection();
         if(movieCollectionList != null){
@@ -138,6 +147,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
     private void findView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         collect = (ImageView) findViewById(R.id.collect);
+        collect.setEnabled(false);
 
 
         movie_poster = (ImageView) findViewById(R.id.movie_poster);
@@ -174,7 +184,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
      */
     private void initData() {
         toolbar.setTitle(mJsonDetailBean.getTitle());
-        ImageUtils.newInstance().displayImage(MovieDetailsActivity.this, mJsonDetailBean.getImages().getLarge(), movie_poster);
+        ImageUtils.getInstance().displayImage(MovieDetailsActivity.this, mJsonDetailBean.getImages().getLarge(), movie_poster);
         movie_title.setText(mJsonDetailBean.getTitle());
 
         movie_original_title.setText(mJsonDetailBean.getOriginal_title() + "(原名)");
@@ -243,6 +253,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
         movie_more_details.setOnClickListener(clickListener);
         buy_movie_tickets.setOnClickListener(clickListener);
         progressDialog.dismiss();
+        collect.setEnabled(true);
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -267,7 +278,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
         DBManager.getInstance(MovieDetailsActivity.this).insertCollection(mJsonDetailBean);
         collect.setBackgroundResource(R.drawable.star_full);
         isCollected = true;
-        Toast.makeText(MovieDetailsActivity.this,getString(R.string.collect_succeed),Toast.LENGTH_LONG).show();
+        //Toast.makeText(MovieDetailsActivity.this,getString(R.string.collect_succeed),Toast.LENGTH_LONG).show();
+        ToastUtils.getInstance().showToast(MovieDetailsActivity.this,getString(R.string.collect_succeed));
     }
 
     /**
@@ -277,7 +289,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieInte
         DBManager.getInstance(MovieDetailsActivity.this).deleteCollectionByMovieId(movieId);
         collect.setBackgroundResource(R.drawable.star_empty);
         isCollected = false;
-        Toast.makeText(MovieDetailsActivity.this,getString(R.string.collect_deleted),Toast.LENGTH_LONG).show();
+        //Toast.makeText(MovieDetailsActivity.this,getString(R.string.collect_deleted),Toast.LENGTH_LONG).show();
+        ToastUtils.getInstance().showToast(MovieDetailsActivity.this,getString(R.string.collect_deleted));
     }
 
     @Override

@@ -56,7 +56,7 @@ public class MajorMovieRecyclerAdapter extends RecyclerView.Adapter<MajorMovieRe
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ImageUtils.newInstance().displayImage(mContext, mWorksList.get(position).getSubject().getImages().getLarge(), holder.movie_image);
+        ImageUtils.getInstance().displayImage(mContext, mWorksList.get(position).getSubject().getImages().getLarge(), holder.movie_image);
         holder.movie_name.setText(mWorksList.get(position).getSubject().getTitle() + "(" + mWorksList.get(position).getSubject().getYear() + ")");
         holder.movie_avg.setText("评分：" + mWorksList.get(position).getSubject().getRating().getAverage());
         holder.major_root.setOnClickListener(new ClickListener(holder.major_root,position));
