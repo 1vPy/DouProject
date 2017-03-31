@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -32,48 +33,13 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <!--    <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="20dp"
-            android:src="@drawable/ic_menu" />-->
-
-    <com.michaldrabik.tapbarmenulib.TapBarMenu
-        android:id="@+id/tapBarMenu"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="40dp"
-        app:tbm_buttonMarginRight="15dp"
-        app:tbm_buttonPosition="right"
-        app:tbm_menuAnchor="bottom">
-
-        <ImageView
-            android:id="@+id/back_to_top"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:src="@drawable/back_to_top" />
-
-
-        <ImageView
-            android:id="@+id/item2"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:src="@drawable/star_full" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-    </com.michaldrabik.tapbarmenulib.TapBarMenu>
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        app:bmb_highlightedColor="@android:color/darker_gray"
+        app:bmb_normalColor="@android:color/holo_blue_dark"
+        app:bmb_pieceCornerRadius="2dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

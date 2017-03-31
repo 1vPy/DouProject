@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.michaldrabik.tapbarmenulib.TapBarMenu;
 import com.roy.douproject.R;
 import com.roy.douproject.view.activity.MainActivity;
 import com.roy.douproject.view.activity.common.LoginActivity;

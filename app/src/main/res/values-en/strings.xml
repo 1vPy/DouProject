@@ -33,4 +33,5 @@
     <string name="collect_deleted">Collection Deleted</string>
     <string name="no_more">No More</string>
     <string name="list_empty">You Collection List Are Empty</string>
+    <string name="func_not_open">Function is not open</string>
 </resources>

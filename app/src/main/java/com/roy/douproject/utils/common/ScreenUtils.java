@@ -92,6 +92,13 @@ public class ScreenUtils {
         return (int) (value / scale + 0.5f);
     }
 
+    public static int dip2px(float dipValue, Context context) {
+        final float scale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (dipValue * scale + 0.5f);
+    }
+
+
+
     /**
      * 获取屏幕密度
      * @param context

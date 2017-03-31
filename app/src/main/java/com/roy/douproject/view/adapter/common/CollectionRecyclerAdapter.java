@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.roy.douproject.R;
 import com.roy.douproject.bean.collection.MovieCollection;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by Administrator on 2017/3/29.
  */
 
-public class CollectionRecyclerAdapter extends RecyclerView.Adapter<CollectionRecyclerAdapter.ItemViewHolder> {
+public class CollectionRecyclerAdapter extends SwipeMenuAdapter<CollectionRecyclerAdapter.ItemViewHolder> {
     private Context mContext;
     private List<MovieCollection> mMovieCollectionList = new ArrayList<>();
 
@@ -40,7 +41,7 @@ public class CollectionRecyclerAdapter extends RecyclerView.Adapter<CollectionRe
         TextView collection_star;
 
     }
-    @Override
+/*    @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_collection,parent,false);
         ItemViewHolder viewHolder = new ItemViewHolder(view);
@@ -48,6 +49,22 @@ public class CollectionRecyclerAdapter extends RecyclerView.Adapter<CollectionRe
         viewHolder.collection_name = (TextView) view.findViewById(R.id.collection_name);
         viewHolder.collection_type = (TextView) view.findViewById(R.id.collection_type);
         viewHolder.collection_star = (TextView) view.findViewById(R.id.collection_star);
+        return viewHolder;
+    }*/
+
+    @Override
+    public View onCreateContentView(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_collection,parent,false);
+        return view;
+    }
+
+    @Override
+    public ItemViewHolder onCompatCreateViewHolder(View realContentView, int viewType) {
+        ItemViewHolder viewHolder = new ItemViewHolder(realContentView);
+        viewHolder.item_collection_root = (LinearLayout) realContentView.findViewById(R.id.item_collection_root);
+        viewHolder.collection_name = (TextView) realContentView.findViewById(R.id.collection_name);
+        viewHolder.collection_type = (TextView) realContentView.findViewById(R.id.collection_type);
+        viewHolder.collection_star = (TextView) realContentView.findViewById(R.id.collection_star);
         return viewHolder;
     }
 

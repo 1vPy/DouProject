@@ -22,11 +22,16 @@
             android:background="@drawable/menu_more"/>
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
+ <!--   <android.support.v7.widget.RecyclerView
         android:id="@+id/collection_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"></android.support.v7.widget.RecyclerView>
+        android:layout_below="@id/toolbar"></android.support.v7.widget.RecyclerView>-->
+    <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+        android:id="@+id/collection_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"/>
     <TextView
         android:id="@+id/collection_tip"
         android:layout_width="wrap_content"

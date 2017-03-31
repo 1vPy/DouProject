@@ -3,9 +3,12 @@ package com.roy.douproject.view.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,15 +16,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.michaldrabik.tapbarmenulib.TapBarMenu;
+import com.nightonke.boommenu.BoomButtons.BoomButton;
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceAlignmentEnum;
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
+import com.nightonke.boommenu.BoomButtons.HamButton;
+import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
+import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.ButtonEnum;
+import com.nightonke.boommenu.OnBoomListener;
+import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 import com.roy.douproject.R;
+import com.roy.douproject.utils.common.ScreenUtils;
+import com.roy.douproject.utils.common.ToastUtils;
 import com.roy.douproject.view.activity.common.CollectionActivity;
 import com.roy.douproject.view.activity.common.LoginActivity;
 import com.roy.douproject.view.adapter.DouBaseFragmentAdapter;
@@ -52,8 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
     private SearchView searchView;
 
-    private TapBarMenu tapBarMenu;
-    private ImageView back_to_top;
+    private BoomMenuButton bmb;
+    private int[] imgText = {R.string.back_top, R.string.collect_succeed};
+    private int[] imgs = {R.drawable.back_to_top, R.drawable.star_full};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initFragment();
         initEvent();
+        bmbInit();
     }
 
     private void initToolBar() {
@@ -93,8 +110,7 @@ public class MainActivity extends AppCompatActivity {
         setting = (Button) findViewById(R.id.setting);
         personal_center = (Button) findViewById(R.id.personsl_center);
 
-        tapBarMenu = (TapBarMenu) findViewById(R.id.tapBarMenu);
-        back_to_top = (ImageView) findViewById(R.id.back_to_top);
+        bmb = (BoomMenuButton) findViewById(R.id.bmb);
     }
 
     private void initView() {
@@ -129,24 +145,31 @@ public class MainActivity extends AppCompatActivity {
     private void initEvent() {
         LogUtils.log(TAG, "iniEvent", LogUtils.DEBUG);
         personal_center.setOnClickListener(clickListener);
-        tapBarMenu.setOnClickListener(clickListener);
-        back_to_top.setOnClickListener(clickListener);
-/*        RxSearchView.queryTextChanges(searchView)
-                .debounce(2, TimeUnit.SECONDS)
-                .flatMap(new Function<CharSequence, Observable<JsonMovieBean>>() {
-                    @Override
-                    public Observable<JsonMovieBean> apply(CharSequence charSequence) throws Exception {
-                        return ApiFactory.getDouMovieApi().searchMovie(charSequence.toString());
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<JsonMovieBean>() {
-                    @Override
-                    public void accept(@NonNull JsonMovieBean jsonMovieBean) throws Exception {
-                        LogUtils.log(TAG,jsonMovieBean.getTitle()+jsonMovieBean.getCount(),LogUtils.DEBUG);
-                    }
-                });*/
+    }
+
+    private void bmbInit(){
+        bmb.setButtonEnum(ButtonEnum.TextOutsideCircle);
+        bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_2_1);
+        bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_2_1);
+        bmb.setButtonPlaceAlignmentEnum(ButtonPlaceAlignmentEnum.BR);
+        bmb.setButtonBottomMargin(ScreenUtils.dip2px(20, this));
+        bmb.setButtonPlaceEnum(ButtonPlaceEnum.Vertical);
+        LogUtils.log(TAG, "num:" + bmb.getPiecePlaceEnum().pieceNumber(), LogUtils.DEBUG);
+        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
+            TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
+                    .normalImageRes(imgs[i])
+                    .imageRect(new Rect(ScreenUtils.dip2px(5, this), ScreenUtils.dip2px(5, this), ScreenUtils.dip2px(45, this), ScreenUtils.dip2px(45, this)))
+                    .rotateImage(true)
+                    .pieceColorRes(android.R.color.holo_blue_light)
+                    .normalColorRes(android.R.color.holo_blue_light)
+                    .textSize(12)
+                    .index(i)
+                    .buttonRadius(ScreenUtils.dip2px(25, this))
+                    .textGravity(Gravity.CENTER_HORIZONTAL)
+                    .normalTextRes(imgText[i]);
+            bmb.addBuilder(builder);
+        }
+        bmb.setOnBoomListener(boomListener);
     }
 
     @Override
@@ -185,14 +208,48 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.personsl_center:
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     break;
-                case R.id.tapBarMenu:
-                    tapBarMenu.toggle();
-                    break;
-                case R.id.back_to_top:
+            }
+        }
+    };
+
+
+    private OnBoomListener boomListener = new OnBoomListener() {
+        @Override
+        public void onClicked(int index, BoomButton boomButton) {
+            LogUtils.log(TAG, "Click:" + index, LogUtils.DEBUG);
+            switch (index){
+                case 0:
                     mMovieFragment.backToTop();
-                    tapBarMenu.close();
+                    break;
+                case 1:
+                    ToastUtils.getInstance().showToast(MainActivity.this,getString(R.string.func_not_open));
                     break;
             }
+        }
+
+        @Override
+        public void onBackgroundClick() {
+
+        }
+
+        @Override
+        public void onBoomWillHide() {
+
+        }
+
+        @Override
+        public void onBoomDidHide() {
+
+        }
+
+        @Override
+        public void onBoomWillShow() {
+
+        }
+
+        @Override
+        public void onBoomDidShow() {
+
         }
     };
 
