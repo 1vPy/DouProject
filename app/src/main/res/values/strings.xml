@@ -3,7 +3,7 @@
     <string name="open">打开</string>
     <string name="close">关闭</string>
     <string name="setting">设置</string>
-    <string name="person_center">个人中心</string>
+    <string name="personal_center">个人中心</string>
     <string name="username">用户名</string>
     <string name="password">密码</string>
     <string name="login">登录</string>
@@ -33,4 +33,10 @@
     <string name="no_more">没有更多了</string>
     <string name="list_empty">您的列表空空如也，快去收藏电影吧~</string>
     <string name="func_not_open">功能暂未开放</string>
+    <string name="user_login">用户登录</string>
+    <string name="user_register">用户注册</string>
+    <string name="no_account">没有账号？点击注册</string>
+    <string name="have_account">已有账号，点击登录</string>
+    <string name="delete">删除</string>
+    <string name="logout">注销当前账号</string>
 </resources>

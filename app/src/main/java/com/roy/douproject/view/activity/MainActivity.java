@@ -38,6 +38,7 @@ import com.roy.douproject.utils.common.ScreenUtils;
 import com.roy.douproject.utils.common.ToastUtils;
 import com.roy.douproject.view.activity.common.CollectionActivity;
 import com.roy.douproject.view.activity.common.LoginActivity;
+import com.roy.douproject.view.activity.common.SettingActivity;
 import com.roy.douproject.view.adapter.DouBaseFragmentAdapter;
 import com.roy.douproject.view.fragment.MovieFragment;
 import com.roy.douproject.utils.common.LogUtils;
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
         //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         toolbar.setTitle(getString(R.string.app_name));
+        toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
     private void initEvent() {
         LogUtils.log(TAG, "iniEvent", LogUtils.DEBUG);
         personal_center.setOnClickListener(clickListener);
+        setting.setOnClickListener(clickListener);
     }
 
     private void bmbInit(){
@@ -204,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.setting:
+                    startActivity(new Intent(MainActivity.this, SettingActivity.class));
                     break;
                 case R.id.personsl_center:
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));

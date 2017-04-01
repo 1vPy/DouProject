@@ -4,7 +4,7 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="setting">Setting</string>
-    <string name="person_center">PersonCenter</string>
+    <string name="personal_center">Personal Center</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -34,4 +34,10 @@
     <string name="no_more">No More</string>
     <string name="list_empty">You Collection List Are Empty</string>
     <string name="func_not_open">Function is not open</string>
+    <string name="user_login">User Login</string>
+    <string name="user_register">User Register</string>
+    <string name="no_account">No Account?Click To Register</string>
+    <string name="have_account">Have Account,Click To Login</string>
+    <string name="delete">Delete</string>
+    <string name="logout">Logout</string>
 </resources>

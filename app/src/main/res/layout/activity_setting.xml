@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical">
+    <include layout="@layout/layout_toolbar"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:paddingLeft="10dp"
+            android:layout_centerVertical="true"
+            android:text="同步到云"/>
+        <com.roy.douproject.widget.SwitchButton
+            android:layout_width="70dip"
+            android:layout_height="34dip"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+</LinearLayout>

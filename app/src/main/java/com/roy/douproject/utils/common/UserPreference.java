@@ -10,6 +10,7 @@ import com.roy.douproject.bean.other.User;
  */
 
 public class UserPreference {
+    private static final String TAG = UserPreference.class.getSimpleName();
     private final static String SP_NAME = "UserInfo";
     private final static int MODE = Context.MODE_PRIVATE;
     private SharedPreferences preferences;
@@ -41,6 +42,7 @@ public class UserPreference {
     public User readUserInfo() {
         String username = preferences.getString("username", "");
         String password = preferences.getString("password", "");
+        LogUtils.log(TAG, "username:" + username + ",password:" + password, LogUtils.DEBUG);
         if (!username.isEmpty() && !password.isEmpty()) {
             User user = new User();
             user.setUsername(username);
@@ -48,6 +50,11 @@ public class UserPreference {
             return user;
         }
         return null;
+    }
+
+    public void clearUserInfo() {
+        editor.clear();
+        editor.commit();
     }
 
 }

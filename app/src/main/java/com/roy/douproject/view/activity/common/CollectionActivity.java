@@ -94,7 +94,7 @@ public class CollectionActivity extends SwipeBackActivity {
                 .setHeight((int) (ScreenUtils.getScreenHeightDp(CollectionActivity.this) * 0.07813) * menuItems.size())     //默认高度480
                 .setWidth((int) (ScreenUtils.getScreenWidthDp(CollectionActivity.this) * 0.44445))      //默认宽度wrap_content
                 .showIcon(true)     //显示菜单图标，默认为true
-                .dimBackground(true)        //背景变暗，默认为true
+                .dimBackground(false)        //背景变暗，默认为true
                 .needAnimationStyle(true)   //显示动画，默认为true
                 .setAnimationStyle(R.style.TRM_ANIM_STYLE)
                 .addMenuList(menuItems);
@@ -179,8 +179,8 @@ public class CollectionActivity extends SwipeBackActivity {
             {
                 SwipeMenuItem deleteItem = new SwipeMenuItem(CollectionActivity.this)
                         .setBackgroundDrawable(android.R.color.holo_red_light)
-                        .setText("删除") // 文字，还可以设置文字颜色，大小等。。
-                        .setTextColor(Color.BLACK)
+                        .setText(getString(R.string.delete)) // 文字，还可以设置文字颜色，大小等。。
+                        .setTextColor(Color.WHITE)
                         .setWidth(width)
                         .setHeight(height);
                 swipeRightMenu.addMenuItem(deleteItem);// 添加一个按钮到右侧侧菜单。
@@ -212,7 +212,11 @@ public class CollectionActivity extends SwipeBackActivity {
                 DBManager.getInstance(CollectionActivity.this).deleteCollectionByMovieId(mMovieCollectionList.get(adapterPosition).getMovieId());
                 mMovieCollectionList.remove(adapterPosition);
                 mCollectionRecyclerAdapter.notifyDataSetChanged();
-
+                if(mMovieCollectionList.size()<=0){
+                    collection_tip.setVisibility(View.VISIBLE);
+                }else{
+                    collection_tip.setVisibility(View.GONE);
+                }
             }
         }
     };

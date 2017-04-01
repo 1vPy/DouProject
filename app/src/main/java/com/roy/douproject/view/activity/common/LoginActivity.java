@@ -26,6 +26,7 @@ import com.roy.douproject.utils.common.LogUtils;
 import com.roy.douproject.utils.common.SmsErrorUtils;
 import com.roy.douproject.utils.common.UserPreference;
 import com.roy.douproject.utils.json.JsonUtils;
+import com.roy.douproject.widget.ClearableEditTextWithIcon;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -63,18 +64,18 @@ public class LoginActivity extends SwipeBackActivity {
     private String password;
 
     ////login
-    private EditText login_username;
-    private EditText login_password;
+    private ClearableEditTextWithIcon login_username;
+    private ClearableEditTextWithIcon login_password;
     private Button login;
 
     ////register
-    private EditText register_username;
+    private ClearableEditTextWithIcon register_username;
     private TextView register_username_tip;
-    private EditText register_password;
-    private EditText register_confirm_password;
+    private ClearableEditTextWithIcon register_password;
+    private ClearableEditTextWithIcon register_confirm_password;
     private TextView register_password_tip;
-    private EditText phone_num;
-    private EditText confirm_num;
+    private ClearableEditTextWithIcon phone_num;
+    private ClearableEditTextWithIcon confirm_num;
     private Button get_confirm_num;
     private Button register;
 
@@ -106,7 +107,7 @@ public class LoginActivity extends SwipeBackActivity {
     private void initToolBar() {
         //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
         //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
-        toolbar.setTitle("用户登录");
+        toolbar.setTitle(getString(R.string.user_login));
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.back_btn);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
@@ -125,39 +126,41 @@ public class LoginActivity extends SwipeBackActivity {
         switch_mode = (TextView) findViewById(R.id.switch_mode);
 
         ////login
-        login_username = (EditText) findViewById(R.id.login_username);
-        login_password = (EditText) findViewById(R.id.login_password);
+        login_username = (ClearableEditTextWithIcon) findViewById(R.id.login_username);
+        login_username.setIconResource(R.drawable.user_account_icon);
+        login_password = (ClearableEditTextWithIcon) findViewById(R.id.login_password);
+        login_password.setIconResource(R.drawable.user_pwd_lock_icon);
         login = (Button) findViewById(R.id.login);
 
         ////register
-        register_username = (EditText) findViewById(R.id.register_username);
+        register_username = (ClearableEditTextWithIcon) findViewById(R.id.register_username);
         register_username_tip = (TextView) findViewById(R.id.register_username_tip);
-        register_password = (EditText) findViewById(R.id.register_password);
-        register_confirm_password = (EditText) findViewById(R.id.register_confirm_password);
+        register_password = (ClearableEditTextWithIcon) findViewById(R.id.register_password);
+        register_confirm_password = (ClearableEditTextWithIcon) findViewById(R.id.register_confirm_password);
         register_password_tip = (TextView) findViewById(R.id.register_password_tip);
-        phone_num = (EditText) findViewById(R.id.phone_num);
-        confirm_num = (EditText) findViewById(R.id.confirm_num);
+        phone_num = (ClearableEditTextWithIcon) findViewById(R.id.phone_num);
+        confirm_num = (ClearableEditTextWithIcon) findViewById(R.id.confirm_num);
         get_confirm_num = (Button) findViewById(R.id.get_confirm_num);
         register = (Button) findViewById(R.id.register);
     }
 
     private void initViewByMode() {
         if (login_mode) {
-            toolbar.setTitle("用户登录");
+            toolbar.setTitle(getString(R.string.user_login));
 
             login_view.setVisibility(View.VISIBLE);
             switch_mode.setVisibility(View.VISIBLE);
             register_view.setVisibility(View.GONE);
 
-            switch_mode.setText("没有账号？点击注册");
+            switch_mode.setText(getString(R.string.no_account));
         } else {
-            toolbar.setTitle("用户注册");
+            toolbar.setTitle(getString(R.string.user_register));
 
             login_view.setVisibility(View.GONE);
             switch_mode.setVisibility(View.VISIBLE);
             register_view.setVisibility(View.VISIBLE);
 
-            switch_mode.setText("已有账号？点击登录");
+            switch_mode.setText(getString(R.string.have_account));
         }
     }
 
@@ -360,10 +363,11 @@ public class LoginActivity extends SwipeBackActivity {
                     public void accept(Results results) throws Exception {
                         switch (Integer.valueOf(results.getStatus())) {
                             case 0:
-                                UserPreference.getUserPreference(DouKit.getContext()).saveUserInfo(new User(username, password));
+                                UserPreference.getUserPreference(DouKit.getContext()).saveUserInfo(new User(username,new String(Hex.encodeHex(DigestUtils.md5(password)))));
                                 //LoginActivity.this.recreate();
                                 startActivity(new Intent(LoginActivity.this,PersonCenterActivity.class));
                                 Toast.makeText(LoginActivity.this, results.getResult(), Toast.LENGTH_LONG).show();
+                                LoginActivity.this.finish();
                                 break;
                             case 1:
                                 Toast.makeText(LoginActivity.this, results.getResult(), Toast.LENGTH_LONG).show();
