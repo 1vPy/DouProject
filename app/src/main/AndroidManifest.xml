@@ -29,9 +29,10 @@
 
         <meta-data
             android:name="com.roy.douproject.utils.image.GlideModuleSetting"
-            android:value="GlideModule"/>
+            android:value="GlideModule" />
 
-        <activity android:name=".view.activity.MainActivity"
+        <activity
+            android:name=".view.activity.MainActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/NoTitleBarTheme">
             <intent-filter>
@@ -44,22 +45,35 @@
                 android:name="android.app.default_searchable"
                 android:value=".view.activity.common.SearchActivity" />
         </activity>
-        <activity android:name=".view.activity.WelcomeActivity"
-            android:screenOrientation="sensorPortrait"/>
-        <activity android:name=".view.activity.movie.detail.MovieDetailsActivity"
-            android:screenOrientation="sensorPortrait"/>
-        <activity android:name=".view.activity.movie.star.StarDetailsActivity"
-            android:screenOrientation="sensorPortrait"/>
-        <activity android:name=".view.activity.common.WebViewActivity"
-            android:screenOrientation="sensorPortrait"/>
-        <activity android:name=".view.activity.common.LoginActivity"
-            android:screenOrientation="sensorPortrait"/>
-        <activity android:name=".view.activity.common.PersonCenterActivity"
-            android:screenOrientation="sensorPortrait"/>
+
+        <activity
+            android:name=".view.activity.WelcomeActivity"
+            android:screenOrientation="sensorPortrait" />
+
+        <activity
+            android:name=".view.activity.movie.detail.MovieDetailsActivity"
+            android:screenOrientation="sensorPortrait" />
+
+        <activity
+            android:name=".view.activity.movie.star.StarDetailsActivity"
+            android:screenOrientation="sensorPortrait" />
+
+        <activity
+            android:name=".view.activity.common.WebViewActivity"
+            android:screenOrientation="sensorPortrait" />
+
+        <activity
+            android:name=".view.activity.common.LoginActivity"
+            android:screenOrientation="sensorPortrait" />
+
+        <activity
+            android:name=".view.activity.common.PersonCenterActivity"
+            android:screenOrientation="sensorPortrait" />
+
         <activity
             android:name=".view.activity.common.SearchActivity"
-            android:screenOrientation="sensorPortrait"
-            android:parentActivityName=".view.activity.MainActivity">
+            android:parentActivityName=".view.activity.MainActivity"
+            android:screenOrientation="sensorPortrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.activity.MainActivity" />
@@ -72,10 +86,14 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.common.CollectionActivity"
-            android:screenOrientation="sensorPortrait"/>
-        <activity android:name=".view.activity.common.SettingActivity"
-            android:screenOrientation="sensorPortrait"/>
+
+        <activity
+            android:name=".view.activity.common.CollectionActivity"
+            android:screenOrientation="sensorPortrait" />
+
+        <activity
+            android:name=".view.activity.common.SettingActivity"
+            android:screenOrientation="sensorPortrait" />
     </application>
 
 </manifest>

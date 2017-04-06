@@ -40,5 +40,7 @@
     <string name="have_account">Have Account,Click To Login</string>
     <string name="delete">Delete</string>
     <string name="logout">Logout</string>
+    <string name="Theme_picker">Theme Picker</string>
     <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 </resources>

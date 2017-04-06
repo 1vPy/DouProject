@@ -19,10 +19,14 @@
         <com.roy.douproject.widget.SwitchButton
             android:id="@+id/synchronization"
             android:layout_width="70dip"
-            android:layout_height="34dip"
+            android:layout_height="36dip"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

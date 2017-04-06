@@ -9,7 +9,9 @@ import android.widget.Button;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.SaturationBar;
 import com.larswerkman.holocolorpicker.ValueBar;
+import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
+import com.roy.douproject.utils.common.ThemePreference;
 
 /**
  * Created by Administrator on 2016/11/30.
@@ -22,6 +24,7 @@ public class ColorDialog extends Dialog {
     private SaturationBar saturationBar;
     private ValueBar valueBar;
     private Button confirm_color;
+    private Button cancel_color;
     private int oldColor;
 
     public ColorDialog(Context context, OnColorChangedListener colorChangedListener, int oldColor) {
@@ -39,15 +42,20 @@ public class ColorDialog extends Dialog {
     }
 
     private void init() {
+        setCanceledOnTouchOutside(false);
+        setTitle(R.string.Theme_picker);
+
         picker = (ColorPicker) findViewById(R.id.picker);
         saturationBar = (SaturationBar) findViewById(R.id.saturationbar);
         valueBar = (ValueBar) findViewById(R.id.valuebar);
         confirm_color = (Button) findViewById(R.id.confirm_color);
+        cancel_color = (Button) findViewById(R.id.cancel_color);
 
         picker.addSaturationBar(saturationBar);
         picker.addValueBar(valueBar);
 
         picker.getColor();
+        picker.setColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
 
         picker.setOldCenterColor(oldColor);
 
@@ -58,13 +66,24 @@ public class ColorDialog extends Dialog {
             }
         });
         picker.setShowOldCenterColor(true);
-        confirm_color.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        confirm_color.setOnClickListener(clickListener);
+        cancel_color.setOnClickListener(clickListener);
     }
+
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.confirm_color:
+                    dismiss();
+                    break;
+                case R.id.cancel_color:
+                    colorChangedListener.colorChanged(oldColor);
+                    dismiss();
+                    break;
+            }
+        }
+    };
 
     public interface OnColorChangedListener {
         /**
@@ -73,5 +92,11 @@ public class ColorDialog extends Dialog {
          * @param color 选中的颜色
          */
         void colorChanged(int color);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        colorChangedListener.colorChanged(oldColor);
     }
 }
