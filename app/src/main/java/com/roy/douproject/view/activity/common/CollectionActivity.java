@@ -13,14 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
 import com.roy.douproject.bean.collection.MovieCollection;
 import com.roy.douproject.db.manager.DBManager;
 import com.roy.douproject.utils.common.LogUtils;
 import com.roy.douproject.utils.common.ScreenUtils;
+import com.roy.douproject.utils.common.SharedPreferencesUtil;
+import com.roy.douproject.utils.common.ThemePreference;
 import com.roy.douproject.view.activity.MainActivity;
 import com.roy.douproject.view.activity.movie.detail.MovieDetailsActivity;
 import com.roy.douproject.view.adapter.common.CollectionRecyclerAdapter;
@@ -41,6 +45,9 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 public class CollectionActivity extends SwipeBackActivity {
     private static final String TAG = CollectionActivity.class.getSimpleName();
+
+    private RelativeLayout root_collection;
+
     private Toolbar toolbar;
     private Button collect_menu;
     //private RecyclerView collection_list;
@@ -74,6 +81,8 @@ public class CollectionActivity extends SwipeBackActivity {
     }
 
     private void findView() {
+        root_collection = (RelativeLayout) findViewById(R.id.root_collection);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         collect_menu = (Button) findViewById(R.id.collect_menu);
         collection_tip = (TextView) findViewById(R.id.collection_tip);
@@ -98,6 +107,11 @@ public class CollectionActivity extends SwipeBackActivity {
                 .needAnimationStyle(true)   //显示动画，默认为true
                 .setAnimationStyle(R.style.TRM_ANIM_STYLE)
                 .addMenuList(menuItems);
+
+        if(SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")){
+            root_collection.setBackgroundColor(getResources().getColor(R.color.protect_color));
+            collection_list.setBackgroundColor(getResources().getColor(R.color.protect_color));
+        }
     }
 
     private void initToolBar() {
@@ -105,6 +119,7 @@ public class CollectionActivity extends SwipeBackActivity {
         //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         toolbar.setTitle(getString(R.string.local_collection));
         setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setNavigationIcon(R.drawable.back_btn);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

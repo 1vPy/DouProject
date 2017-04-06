@@ -7,6 +7,7 @@
         android:id="@+id/search_image"
         android:layout_width="100dp"
         android:layout_height="130dp"
+        android:scaleType="centerCrop"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"/>
     <LinearLayout

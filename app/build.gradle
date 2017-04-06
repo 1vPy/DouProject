@@ -56,5 +56,6 @@ dependencies {
     compile 'com.zaaach:toprightmenu:1.0'
     compile 'com.nightonke:boommenu:2.0.8'
     compile 'com.yanzhenjie:recyclerview-swipe:1.0.4'
+    compile 'com.larswerkman:HoloColorPicker:1.5'
     compile project(':library')
 }

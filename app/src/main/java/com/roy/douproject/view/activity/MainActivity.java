@@ -33,8 +33,11 @@ import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.OnBoomListener;
 import com.nightonke.boommenu.Piece.PiecePlaceEnum;
+import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
+import com.roy.douproject.datainterface.other.OnThemeChangeListener;
 import com.roy.douproject.utils.common.ScreenUtils;
+import com.roy.douproject.utils.common.ThemePreference;
 import com.roy.douproject.utils.common.ToastUtils;
 import com.roy.douproject.view.activity.common.CollectionActivity;
 import com.roy.douproject.view.activity.common.LoginActivity;
@@ -43,12 +46,13 @@ import com.roy.douproject.view.adapter.DouBaseFragmentAdapter;
 import com.roy.douproject.view.fragment.MovieFragment;
 import com.roy.douproject.utils.common.LogUtils;
 import com.roy.douproject.utils.image.ImageUtils;
+import com.roy.douproject.widget.ColorDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnThemeChangeListener{
     private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout drawerLayout_main;
     private Toolbar toolbar;
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         toolbar.setTitle(getString(R.string.app_name));
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+        toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         LogUtils.log(TAG, "iniEvent", LogUtils.DEBUG);
         personal_center.setOnClickListener(clickListener);
         setting.setOnClickListener(clickListener);
+        DouKit.addOnThemeChangeListener(this);
     }
 
     private void bmbInit(){
@@ -202,15 +208,18 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.setting:
                     startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                    hiddenDrawer();
                     break;
                 case R.id.personsl_center:
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    hiddenDrawer();
                     break;
             }
         }
@@ -276,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, CollectionActivity.class));
                         break;
                     case R.id.nav_menu_theme:
+                        showColorDialog();
                         break;
                     case R.id.nav_menu_feedback:
                         break;
@@ -283,18 +293,53 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
 
-                // Menu item点击后选中，并关闭Drawerlayout
                 menuItem.setChecked(true);
-                drawerLayout_main.closeDrawers();
-                // Toast.makeText(MainActivity.this,msgString,Toast.LENGTH_SHORT).show();
+                hiddenDrawer();
                 return true;
             }
         });
+    }
+
+    private void showColorDialog() {
+        ColorDialog colorDialog = new ColorDialog(MainActivity.this, new ColorDialog.OnColorChangedListener() {
+            @Override
+            public void colorChanged(int color) {
+                ThemePreference.getThemePreference(MainActivity.this).saveTheme(color);
+                List<OnThemeChangeListener> onThemeChangeListenerList = DouKit.getOnThemeChangeListener();
+                if(onThemeChangeListenerList != null){
+                    for (OnThemeChangeListener colorChangeListener : onThemeChangeListenerList) {
+                        colorChangeListener.themeChanged(color);
+                    }
+                }
+
+            }
+        }, ThemePreference.getThemePreference(MainActivity.this).readTheme());
+        colorDialog.show();
+    }
+
+    private void hiddenDrawer(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                drawerLayout_main.closeDrawers();
+            }
+        },1000);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         moveTaskToBack(isTaskRoot());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DouKit.removeOnThemeChangeListener(this);
+    }
+
+    @Override
+    public void themeChanged(int color) {
+        toolbar.setBackgroundColor(color);
     }
 }

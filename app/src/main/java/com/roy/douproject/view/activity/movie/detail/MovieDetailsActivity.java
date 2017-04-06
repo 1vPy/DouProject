@@ -11,10 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
 import com.roy.douproject.bean.collection.MovieCollection;
 import com.roy.douproject.bean.movie.JsonMovieBean;
@@ -22,6 +24,8 @@ import com.roy.douproject.bean.movie.star.JsonStarBean;
 import com.roy.douproject.datainterface.movie.MovieInterface;
 import com.roy.douproject.db.manager.DBManager;
 import com.roy.douproject.presenter.movie.MoviePresenter;
+import com.roy.douproject.utils.common.SharedPreferencesUtil;
+import com.roy.douproject.utils.common.ThemePreference;
 import com.roy.douproject.utils.common.ToastUtils;
 import com.roy.douproject.view.activity.common.WebViewActivity;
 import com.roy.douproject.view.activity.movie.star.StarDetailsActivity;
@@ -50,6 +54,8 @@ public class MovieDetailsActivity extends SwipeBackActivity implements MovieInte
     private JsonDetailBean mJsonDetailBean;
     private List<Directors> mDirectorsList = new ArrayList<>();
     private List<Casts> mCastsList = new ArrayList<>();
+
+    private RelativeLayout root_moviedetails;
 
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
@@ -131,6 +137,7 @@ public class MovieDetailsActivity extends SwipeBackActivity implements MovieInte
         //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
         //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setNavigationIcon(R.drawable.back_btn);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -145,6 +152,10 @@ public class MovieDetailsActivity extends SwipeBackActivity implements MovieInte
      * 初始化控件
      */
     private void findView() {
+        root_moviedetails = (RelativeLayout) findViewById(R.id.root_moviedetails);
+        if(SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")){
+            root_moviedetails.setBackgroundColor(getResources().getColor(R.color.protect_color));
+        }
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         collect = (ImageView) findViewById(R.id.collect);
         collect.setEnabled(false);

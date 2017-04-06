@@ -8,14 +8,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
 import com.roy.douproject.bean.movie.details.JsonDetailBean;
 import com.roy.douproject.bean.movie.star.JsonStarBean;
 import com.roy.douproject.datainterface.movie.MovieInterface;
 import com.roy.douproject.presenter.movie.MoviePresenter;
+import com.roy.douproject.utils.common.SharedPreferencesUtil;
+import com.roy.douproject.utils.common.ThemePreference;
 import com.roy.douproject.view.activity.movie.detail.MovieDetailsActivity;
 import com.roy.douproject.view.adapter.SearchResultAdapter;
 import com.roy.douproject.api.ApiFactory;
@@ -38,6 +42,9 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 public class SearchActivity extends SwipeBackActivity implements MovieInterface{
     private static final String TAG = SearchActivity.class.getSimpleName();
+
+    private RelativeLayout root_search;
+
     private Toolbar toolbar;
     private ListView search_result;
 
@@ -89,6 +96,7 @@ public class SearchActivity extends SwipeBackActivity implements MovieInterface{
         //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         toolbar.setTitle("搜索结果");
         setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setNavigationIcon(R.drawable.back_btn);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -100,8 +108,14 @@ public class SearchActivity extends SwipeBackActivity implements MovieInterface{
     }
 
     private void findView() {
+        root_search = (RelativeLayout) findViewById(R.id.root_search);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         search_result = (ListView) findViewById(R.id.search_result);
+        if(SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")){
+            search_result.setBackgroundColor(getResources().getColor(R.color.protect_color));
+            root_search.setBackgroundColor(getResources().getColor(R.color.protect_color));
+        }
+
         search_tip = (TextView) findViewById(R.id.search_tip);
     }
 

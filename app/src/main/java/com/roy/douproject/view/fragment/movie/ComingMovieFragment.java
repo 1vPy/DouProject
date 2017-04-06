@@ -5,19 +5,24 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.ContentFrameLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
 import com.roy.douproject.bean.movie.details.JsonDetailBean;
 import com.roy.douproject.bean.movie.star.JsonStarBean;
 import com.roy.douproject.datainterface.movie.MovieInterface;
+import com.roy.douproject.datainterface.other.OnProtectModeListener;
+import com.roy.douproject.utils.common.SharedPreferencesUtil;
 import com.roy.douproject.view.activity.movie.detail.MovieDetailsActivity;
 import com.roy.douproject.view.adapter.movie.ComingMovieRecyclerAdapter;
 import com.roy.douproject.bean.movie.JsonMovieBean;
@@ -34,10 +39,13 @@ import java.util.List;
  * Created by Administrator on 2017/3/2.
  */
 
-public class ComingMovieFragment extends Fragment implements MovieInterface {
+public class ComingMovieFragment extends Fragment implements MovieInterface, OnProtectModeListener {
     private static final String TAG = ComingMovieFragment.class.getSimpleName();
     private static final int PAGESIZE = 20;
     private int pageCount;
+
+    private RelativeLayout root_comingmovie;
+
     private RecyclerView movie_recyclerView;
     private TextView comingmovie_tip;
     private SwipeRefreshLayout comingmovie_refresh;
@@ -77,9 +85,16 @@ public class ComingMovieFragment extends Fragment implements MovieInterface {
 
 
     private void initView() {
+        root_comingmovie = (RelativeLayout) getActivity().findViewById(R.id.root_comingmovie);
         comingmovie_tip = (TextView) getActivity().findViewById(R.id.comingmovie_tip);
         comingmovie_refresh = (SwipeRefreshLayout) getActivity().findViewById(R.id.comingmovie_refresh);
         movie_recyclerView = (RecyclerView) getActivity().findViewById(R.id.comingmovie_recyclerView);
+        if (SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")) {
+            root_comingmovie.setBackgroundColor(getResources().getColor(R.color.protect_color));
+            movie_recyclerView.setBackgroundColor(getResources().getColor(R.color.protect_color));
+        }
+
+
         movie_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         SpacesItemDecoration spacesItemDecoration = new SpacesItemDecoration(ScreenUtils.dipToPx(getActivity(), 10), ScreenUtils.dipToPx(getActivity(), 10), ScreenUtils.dipToPx(getActivity(), 10), 0);
         movie_recyclerView.addItemDecoration(spacesItemDecoration);
@@ -92,6 +107,7 @@ public class ComingMovieFragment extends Fragment implements MovieInterface {
         comingmovie_refresh.setColorSchemeColors(getResources().getColor(android.R.color.holo_blue_bright), getResources().getColor(android.R.color.holo_green_light),
                 getResources().getColor(android.R.color.holo_orange_light), getResources().getColor(android.R.color.holo_red_light));
         comingmovie_refresh.setOnRefreshListener(refreshListener);
+        DouKit.addOnProtectModeListener(this);
     }
 
     private SwipeRefreshLayout.OnRefreshListener refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
@@ -208,16 +224,36 @@ public class ComingMovieFragment extends Fragment implements MovieInterface {
 /*                mSubjectsList.add(null);
                 mComingMovieRecyclerAdapter.notifyDataSetChanged();*/
                 mComingMovieRecyclerAdapter.setLoaded();
-                Toast.makeText(getActivity(),getString(R.string.no_more),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getString(R.string.no_more), Toast.LENGTH_LONG).show();
             }
         }
     };
 
-    public void scrollToTop(){
-        if(((LinearLayoutManager)(movie_recyclerView.getLayoutManager())).findLastVisibleItemPosition()>30){
+    public void scrollToTop() {
+        if (((LinearLayoutManager) (movie_recyclerView.getLayoutManager())).findLastVisibleItemPosition() > 30) {
             movie_recyclerView.scrollToPosition(0);
-        }else{
+        } else {
             movie_recyclerView.smoothScrollToPosition(0);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        DouKit.removeOnProtectModeListener(this);
+    }
+
+    @Override
+    public void modeChanged(boolean isOpen) {
+        LogUtils.log(TAG,"added:"+isAdded(),LogUtils.DEBUG);
+        if (isAdded()) {
+            if (isOpen) {
+                root_comingmovie.setBackgroundColor(getResources().getColor(R.color.protect_color));
+                movie_recyclerView.setBackgroundColor(getResources().getColor(R.color.protect_color));
+            } else {
+                root_comingmovie.setBackgroundColor(getResources().getColor(android.R.color.white));
+                movie_recyclerView.setBackgroundColor(getResources().getColor(android.R.color.white));
+            }
         }
     }
 }

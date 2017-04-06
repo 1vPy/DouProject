@@ -3,20 +3,23 @@ package com.roy.douproject.view.activity.movie.star;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
 import com.roy.douproject.bean.movie.JsonMovieBean;
 import com.roy.douproject.bean.movie.details.JsonDetailBean;
 import com.roy.douproject.datainterface.movie.MovieInterface;
 import com.roy.douproject.presenter.movie.MoviePresenter;
+import com.roy.douproject.utils.common.SharedPreferencesUtil;
+import com.roy.douproject.utils.common.ThemePreference;
 import com.roy.douproject.view.activity.common.WebViewActivity;
 import com.roy.douproject.view.activity.movie.detail.MovieDetailsActivity;
 import com.roy.douproject.view.adapter.movie.star.MajorMovieRecyclerAdapter;
@@ -42,6 +45,8 @@ public class StarDetailsActivity extends SwipeBackActivity implements MovieInter
     private String starId;
     private JsonStarBean mJsonStarBean;
 
+    private RelativeLayout root_stardetails;
+
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
 
@@ -62,7 +67,7 @@ public class StarDetailsActivity extends SwipeBackActivity implements MovieInter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stardetail);
+        setContentView(R.layout.activity_stardetails);
         progressDialog = new ProgressDialog(StarDetailsActivity.this);
         progressDialog.show();
         mSwipeBackLayout = getSwipeBackLayout();
@@ -85,6 +90,7 @@ public class StarDetailsActivity extends SwipeBackActivity implements MovieInter
         //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
         //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setNavigationIcon(R.drawable.back_btn);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -96,6 +102,11 @@ public class StarDetailsActivity extends SwipeBackActivity implements MovieInter
     }
 
     private void findView(){
+        root_stardetails = (RelativeLayout) findViewById(R.id.root_stardetails);
+        if(SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")){
+            root_stardetails.setBackgroundColor(getResources().getColor(R.color.protect_color));
+        }
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         star_image = (ImageView) findViewById(R.id.star_image);
         star_name = (TextView) findViewById(R.id.star_name);

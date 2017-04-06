@@ -24,6 +24,7 @@ import com.roy.douproject.bean.other.SmsResults;
 import com.roy.douproject.bean.other.User;
 import com.roy.douproject.utils.common.LogUtils;
 import com.roy.douproject.utils.common.SmsErrorUtils;
+import com.roy.douproject.utils.common.ThemePreference;
 import com.roy.douproject.utils.common.UserPreference;
 import com.roy.douproject.utils.json.JsonUtils;
 import com.roy.douproject.widget.ClearableEditTextWithIcon;
@@ -109,6 +110,7 @@ public class LoginActivity extends SwipeBackActivity {
         //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         toolbar.setTitle(getString(R.string.user_login));
         setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setNavigationIcon(R.drawable.back_btn);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

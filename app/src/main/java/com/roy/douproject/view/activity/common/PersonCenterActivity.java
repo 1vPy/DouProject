@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
+import com.roy.douproject.utils.common.ThemePreference;
 import com.roy.douproject.utils.common.UserPreference;
 import com.roy.douproject.utils.image.ImageUtils;
 
@@ -56,6 +57,7 @@ public class PersonCenterActivity extends SwipeBackActivity {
         //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         toolbar.setTitle(getString(R.string.personal_center));
         setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setNavigationIcon(R.drawable.back_btn);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
