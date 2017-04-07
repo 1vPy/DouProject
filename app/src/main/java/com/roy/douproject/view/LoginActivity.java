@@ -1,16 +1,14 @@
-package com.roy.douproject.view.activity.common;
+package com.roy.douproject.view;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,18 +49,12 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 public class LoginActivity extends SwipeBackActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
-    private User user;
-    private boolean login_mode = true;
-
+    ////layout
+    private SwipeBackLayout mSwipeBackLayout;
     private Toolbar toolbar;
-
     private RelativeLayout login_view;
     private RelativeLayout register_view;
     private TextView switch_mode;
-
-    ////
-    private String username;
-    private String password;
 
     ////login
     private ClearableEditTextWithIcon login_username;
@@ -80,9 +72,12 @@ public class LoginActivity extends SwipeBackActivity {
     private Button get_confirm_num;
     private Button register;
 
+    ////data
+    private String username;
+    private String password;
+    private User user;
+    private boolean login_mode = true;
     private boolean canUsername = false;
-
-    private SwipeBackLayout mSwipeBackLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,10 +101,8 @@ public class LoginActivity extends SwipeBackActivity {
     }
 
     private void initToolBar() {
-        //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
-        //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
-        toolbar.setTitle(getString(R.string.user_login));
         setSupportActionBar(toolbar);
+        toolbar.setTitle(getString(R.string.user_login));
         toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setNavigationIcon(R.drawable.back_btn);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));

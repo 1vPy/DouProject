@@ -5,7 +5,7 @@
     android:id="@+id/root_collection"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.roy.douproject.view.activity.common.CollectionActivity">
+    tools:context="com.roy.douproject.view.CollectionActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

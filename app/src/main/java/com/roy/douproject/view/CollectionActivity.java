@@ -1,17 +1,12 @@
-package com.roy.douproject.view.activity.common;
+package com.roy.douproject.view;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,9 +20,7 @@ import com.roy.douproject.utils.common.LogUtils;
 import com.roy.douproject.utils.common.ScreenUtils;
 import com.roy.douproject.utils.common.SharedPreferencesUtil;
 import com.roy.douproject.utils.common.ThemePreference;
-import com.roy.douproject.view.activity.MainActivity;
-import com.roy.douproject.view.activity.movie.detail.MovieDetailsActivity;
-import com.roy.douproject.view.adapter.common.CollectionRecyclerAdapter;
+import com.roy.douproject.view.adapter.CollectionRecyclerAdapter;
 import com.yanzhenjie.recyclerview.swipe.Closeable;
 import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
@@ -47,23 +40,20 @@ public class CollectionActivity extends SwipeBackActivity {
     private static final String TAG = CollectionActivity.class.getSimpleName();
 
     private RelativeLayout root_collection;
-
     private Toolbar toolbar;
     private Button collect_menu;
-    //private RecyclerView collection_list;
     private SwipeMenuRecyclerView collection_list;
-
     private TextView collection_tip;
-
     private TopRightMenu mTopRightMenu;
+    private SwipeBackLayout mSwipeBackLayout;
+
 
     private CollectionRecyclerAdapter mCollectionRecyclerAdapter;
     private List<MovieCollection> mMovieCollectionList = new ArrayList<>();
     private List<MovieCollection> mLoadMovieCollectionList = new ArrayList<>();
 
-    List<MenuItem> menuItems = new ArrayList<>();
+    private List<MenuItem> menuItems = new ArrayList<>();
 
-    private SwipeBackLayout mSwipeBackLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,24 +67,24 @@ public class CollectionActivity extends SwipeBackActivity {
     private void init() {
         findView();
         initToolBar();
+        initView();
         initEvent();
     }
 
     private void findView() {
         root_collection = (RelativeLayout) findViewById(R.id.root_collection);
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         collect_menu = (Button) findViewById(R.id.collect_menu);
         collection_tip = (TextView) findViewById(R.id.collection_tip);
-        //collection_list = (RecyclerView) findViewById(R.id.collection_list);
         collection_list = (SwipeMenuRecyclerView) findViewById(R.id.collection_list);
+    }
+
+    private void initView() {
         collection_list.setLayoutManager(new LinearLayoutManager(CollectionActivity.this));
         mCollectionRecyclerAdapter = new CollectionRecyclerAdapter(CollectionActivity.this, mMovieCollectionList);
 
         collection_list.setSwipeMenuCreator(swipeMenuCreator);
         collection_list.setAdapter(mCollectionRecyclerAdapter);
-        //collection_list.setLongPressDragEnabled(true); // 开启拖拽。
-        //collection_list.setItemViewSwipeEnabled(true);
 
         mTopRightMenu = new TopRightMenu(CollectionActivity.this);
         menuItems.add(new MenuItem("清空收藏"));
@@ -108,15 +98,13 @@ public class CollectionActivity extends SwipeBackActivity {
                 .setAnimationStyle(R.style.TRM_ANIM_STYLE)
                 .addMenuList(menuItems);
 
-        if(SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")){
+        if (SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")) {
             root_collection.setBackgroundColor(getResources().getColor(R.color.protect_color));
             collection_list.setBackgroundColor(getResources().getColor(R.color.protect_color));
         }
     }
 
     private void initToolBar() {
-        //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
-        //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         toolbar.setTitle(getString(R.string.local_collection));
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
@@ -227,9 +215,9 @@ public class CollectionActivity extends SwipeBackActivity {
                 DBManager.getInstance(CollectionActivity.this).deleteCollectionByMovieId(mMovieCollectionList.get(adapterPosition).getMovieId());
                 mMovieCollectionList.remove(adapterPosition);
                 mCollectionRecyclerAdapter.notifyDataSetChanged();
-                if(mMovieCollectionList.size()<=0){
+                if (mMovieCollectionList.size() <= 0) {
                     collection_tip.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     collection_tip.setVisibility(View.GONE);
                 }
             }

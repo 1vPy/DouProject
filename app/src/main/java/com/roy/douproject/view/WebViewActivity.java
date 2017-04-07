@@ -1,4 +1,4 @@
-package com.roy.douproject.view.activity.common;
+package com.roy.douproject.view;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -21,17 +21,23 @@ public class WebViewActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         findView();
+        initView();
         initData();
     }
 
     private void findView(){
         mWebView = (WebView) findViewById(R.id.webview);
+
+    }
+
+    private void initView(){
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         mWebView.getSettings().setSupportMultipleWindows(true);
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.setWebChromeClient(new WebChromeClient());
     }
+
     private void initData(){
         if(getIntent() != null){
             mUrl = getIntent().getStringExtra("url");

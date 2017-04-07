@@ -1,10 +1,9 @@
-package com.roy.douproject.view.fragment.movie;
+package com.roy.douproject.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +16,11 @@ import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
 import com.roy.douproject.bean.movie.details.JsonDetailBean;
 import com.roy.douproject.bean.movie.star.JsonStarBean;
-import com.roy.douproject.datainterface.movie.MovieInterface;
-import com.roy.douproject.datainterface.other.OnProtectModeListener;
+import com.roy.douproject.support.movie.MovieInterface;
+import com.roy.douproject.support.listener.OnProtectModeListener;
 import com.roy.douproject.utils.common.SharedPreferencesUtil;
-import com.roy.douproject.view.activity.movie.detail.MovieDetailsActivity;
-import com.roy.douproject.view.adapter.movie.HotMovieRecyclerAdapter;
+import com.roy.douproject.view.MovieDetailsActivity;
+import com.roy.douproject.view.adapter.HotMovieRecyclerAdapter;
 import com.roy.douproject.bean.movie.JsonMovieBean;
 import com.roy.douproject.bean.movie.Subjects;
 import com.roy.douproject.presenter.movie.MoviePresenter;
@@ -64,8 +63,20 @@ public class HotMovieFragment extends Fragment implements MovieInterface, OnProt
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        init();
+    }
+
+    private void init(){
+        findView();
         initView();
         initData();
+        initEvent();
+    }
+
+    private void findView(){
+        root_hotmovie = (RelativeLayout) getActivity().findViewById(R.id.root_hotmovie);
+        hotmovie_tip = (TextView) getActivity().findViewById(R.id.hotmovie_tip);
+        movie_recyclerView = (RecyclerView) getActivity().findViewById(R.id.hotmovie_recyclerView);
     }
 
     private void initData() {
@@ -73,32 +84,36 @@ public class HotMovieFragment extends Fragment implements MovieInterface, OnProt
     }
 
     private void initView() {
-        root_hotmovie = (RelativeLayout) getActivity().findViewById(R.id.root_hotmovie);
-        hotmovie_tip = (TextView) getActivity().findViewById(R.id.hotmovie_tip);
-        movie_recyclerView = (RecyclerView) getActivity().findViewById(R.id.hotmovie_recyclerView);
-        if (SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")) {
-            root_hotmovie.setBackgroundColor(getResources().getColor(R.color.protect_color));
-            movie_recyclerView.setBackgroundColor(getResources().getColor(R.color.protect_color));
-        }
-
         movie_recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         SpacesItemDecoration spacesItemDecoration = new SpacesItemDecoration(ScreenUtils.dipToPx(getActivity(), 10), ScreenUtils.dipToPx(getActivity(), 10), ScreenUtils.dipToPx(getActivity(), 10), 0);
         movie_recyclerView.addItemDecoration(spacesItemDecoration);
         mHotMovieRecyclerAdapter = new HotMovieRecyclerAdapter(getActivity(), mSubjectsList);
         movie_recyclerView.setAdapter(mHotMovieRecyclerAdapter);
-        mHotMovieRecyclerAdapter.setOnRecyclerViewItemClickListener(new HotMovieRecyclerAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                LogUtils.log(TAG, mSubjectsList.get(position).getId(), LogUtils.DEBUG);
-                Intent intent = new Intent();
-                intent.putExtra("movieId", mSubjectsList.get(position).getId());
-                intent.setClass(getActivity(), MovieDetailsActivity.class);
-                startActivity(intent);
-            }
-        });
 
+
+        if (SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")) {
+            root_hotmovie.setBackgroundColor(getResources().getColor(R.color.protect_color));
+            movie_recyclerView.setBackgroundColor(getResources().getColor(R.color.protect_color));
+        }
+
+
+    }
+
+    private void initEvent(){
+        mHotMovieRecyclerAdapter.setOnRecyclerViewItemClickListener(onRecyclerViewItemClickListener);
         DouKit.addOnProtectModeListener(this);
     }
+
+    private HotMovieRecyclerAdapter.OnRecyclerViewItemClickListener onRecyclerViewItemClickListener =  new HotMovieRecyclerAdapter.OnRecyclerViewItemClickListener() {
+        @Override
+        public void onItemClick(View v, int position) {
+            LogUtils.log(TAG, mSubjectsList.get(position).getId(), LogUtils.DEBUG);
+            Intent intent = new Intent();
+            intent.putExtra("movieId", mSubjectsList.get(position).getId());
+            intent.setClass(getActivity(), MovieDetailsActivity.class);
+            startActivity(intent);
+        }
+    };
 
 
     @Override

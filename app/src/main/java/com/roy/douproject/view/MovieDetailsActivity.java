@@ -1,10 +1,9 @@
-package com.roy.douproject.view.activity.movie.detail;
+package com.roy.douproject.view;
 
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,25 +11,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
 import com.roy.douproject.bean.collection.MovieCollection;
 import com.roy.douproject.bean.movie.JsonMovieBean;
 import com.roy.douproject.bean.movie.star.JsonStarBean;
-import com.roy.douproject.datainterface.movie.MovieInterface;
+import com.roy.douproject.support.movie.MovieInterface;
 import com.roy.douproject.db.manager.DBManager;
 import com.roy.douproject.presenter.movie.MoviePresenter;
 import com.roy.douproject.utils.common.SharedPreferencesUtil;
 import com.roy.douproject.utils.common.ThemePreference;
 import com.roy.douproject.utils.common.ToastUtils;
-import com.roy.douproject.view.activity.common.WebViewActivity;
-import com.roy.douproject.view.activity.movie.star.StarDetailsActivity;
-import com.roy.douproject.view.adapter.movie.details.MovieDirectorsRecyclerAdapter;
-import com.roy.douproject.view.adapter.movie.details.MovieStarsRecyclerAdapter;
+import com.roy.douproject.view.adapter.MovieDirectorsRecyclerAdapter;
+import com.roy.douproject.view.adapter.MovieStarsRecyclerAdapter;
 import com.roy.douproject.bean.movie.Casts;
 import com.roy.douproject.bean.movie.Directors;
 import com.roy.douproject.bean.movie.details.JsonDetailBean;
@@ -50,18 +45,15 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 public class MovieDetailsActivity extends SwipeBackActivity implements MovieInterface {
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
-    private String movieId;
-    private JsonDetailBean mJsonDetailBean;
-    private List<Directors> mDirectorsList = new ArrayList<>();
-    private List<Casts> mCastsList = new ArrayList<>();
-
     private RelativeLayout root_moviedetails;
+    private SwipeBackLayout mSwipeBackLayout;
 
     private ProgressDialog progressDialog;
+
     private Toolbar toolbar;
     private ImageView collect;
-
     private ImageView movie_poster;
+
     private TextView movie_title;
     private TextView movie_original_title;
     private TextView movie_type;
@@ -80,34 +72,35 @@ public class MovieDetailsActivity extends SwipeBackActivity implements MovieInte
 
     private MovieDirectorsRecyclerAdapter mMovieDirectorsRecyclerAdapter;
     private MovieStarsRecyclerAdapter mMovieStarsRecyclerAdapter;
-
     private MoviePresenter moviePresenter = new MoviePresenter(this);
 
-    private boolean isCollected = false;
-    private List<MovieCollection> movieCollectionList = new ArrayList<>();
 
-    private SwipeBackLayout mSwipeBackLayout;
+    private List<MovieCollection> movieCollectionList = new ArrayList<>();
+    private List<Directors> mDirectorsList = new ArrayList<>();
+    private List<Casts> mCastsList = new ArrayList<>();
+
+    private String movieId;
+    private JsonDetailBean mJsonDetailBean;
+    private boolean isCollected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moviedetails);
+
         progressDialog = new ProgressDialog(MovieDetailsActivity.this);
         progressDialog.show();
+
         mSwipeBackLayout = getSwipeBackLayout();
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
         init();
-        movieCollectionList = DBManager.getInstance(this).searchCollection();
-        if(movieCollectionList != null){
-            for(MovieCollection movieCollection : movieCollectionList){
-                LogUtils.log(TAG,movieCollection.getMovieName(),LogUtils.DEBUG);
-            }
-        }
     }
 
     private void init() {
         findView();
         initToolBar();
+        initView();
         if (getIntent() != null) {
             movieId = getIntent().getStringExtra("movieId");
         }
@@ -122,9 +115,9 @@ public class MovieDetailsActivity extends SwipeBackActivity implements MovieInte
      * 设置收藏按钮点击事件
      * 判断当前电影是否已收藏(设置对应的图标)
      */
-    private void initEvent(){
+    private void initEvent() {
         collect.setOnClickListener(clickListener);
-        if(DBManager.getInstance(this).searchCollectionByMovieId(movieId) != null){
+        if (DBManager.getInstance(this).searchCollectionByMovieId(movieId) != null) {
             collect.setBackgroundResource(R.drawable.star_full);
             isCollected = true;
         }
@@ -134,8 +127,6 @@ public class MovieDetailsActivity extends SwipeBackActivity implements MovieInte
      * 设置toolbar
      */
     private void initToolBar() {
-        //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
-        //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setNavigationIcon(R.drawable.back_btn);
@@ -152,16 +143,17 @@ public class MovieDetailsActivity extends SwipeBackActivity implements MovieInte
      * 初始化控件
      */
     private void findView() {
+        //layout
         root_moviedetails = (RelativeLayout) findViewById(R.id.root_moviedetails);
-        if(SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")){
-            root_moviedetails.setBackgroundColor(getResources().getColor(R.color.protect_color));
-        }
+
+        //toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        //imageView
         collect = (ImageView) findViewById(R.id.collect);
-        collect.setEnabled(false);
-
-
         movie_poster = (ImageView) findViewById(R.id.movie_poster);
+
+        //textView
         movie_title = (TextView) findViewById(R.id.movie_title);
         movie_original_title = (TextView) findViewById(R.id.movie_original_title);
         movie_type = (TextView) findViewById(R.id.movie_type);
@@ -171,10 +163,19 @@ public class MovieDetailsActivity extends SwipeBackActivity implements MovieInte
         movie_watched = (TextView) findViewById(R.id.movie_watched);
         movie_want_watch = (TextView) findViewById(R.id.movie_want_watch);
         movie_description = (TextView) findViewById(R.id.movie_description);
+
+        //button
         movie_more_details = (Button) findViewById(R.id.movie_more_details);
         buy_movie_tickets = (Button) findViewById(R.id.buy_movie_tickets);
 
+        //recylcerView
         movie_directors = (RecyclerView) findViewById(R.id.movie_directors);
+        movie_stars = (RecyclerView) findViewById(R.id.movie_stars);
+    }
+
+    private void initView() {
+        collect.setEnabled(false);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         movie_directors.setLayoutManager(linearLayoutManager);
@@ -184,10 +185,13 @@ public class MovieDetailsActivity extends SwipeBackActivity implements MovieInte
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(this);
         linearLayoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
 
-        movie_stars = (RecyclerView) findViewById(R.id.movie_stars);
         movie_stars.setLayoutManager(linearLayoutManager2);
         mMovieStarsRecyclerAdapter = new MovieStarsRecyclerAdapter(MovieDetailsActivity.this, mCastsList);
         movie_stars.setAdapter(mMovieStarsRecyclerAdapter);
+
+        if (SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")) {
+            root_moviedetails.setBackgroundColor(getResources().getColor(R.color.protect_color));
+        }
     }
 
     /**
@@ -270,11 +274,11 @@ public class MovieDetailsActivity extends SwipeBackActivity implements MovieInte
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.collect:
-                    if(isCollected){
+                    if (isCollected) {
                         unCollect();
-                    }else{
+                    } else {
                         collect();
                     }
                     break;
@@ -285,23 +289,23 @@ public class MovieDetailsActivity extends SwipeBackActivity implements MovieInte
     /**
      * 收藏
      */
-    private void collect(){
+    private void collect() {
         DBManager.getInstance(MovieDetailsActivity.this).insertCollection(mJsonDetailBean);
         collect.setBackgroundResource(R.drawable.star_full);
         isCollected = true;
         //Toast.makeText(MovieDetailsActivity.this,getString(R.string.collect_succeed),Toast.LENGTH_LONG).show();
-        ToastUtils.getInstance().showToast(MovieDetailsActivity.this,getString(R.string.collect_succeed));
+        ToastUtils.getInstance().showToast(MovieDetailsActivity.this, getString(R.string.collect_succeed));
     }
 
     /**
      * 取消收藏
      */
-    private void unCollect(){
+    private void unCollect() {
         DBManager.getInstance(MovieDetailsActivity.this).deleteCollectionByMovieId(movieId);
         collect.setBackgroundResource(R.drawable.star_empty);
         isCollected = false;
         //Toast.makeText(MovieDetailsActivity.this,getString(R.string.collect_deleted),Toast.LENGTH_LONG).show();
-        ToastUtils.getInstance().showToast(MovieDetailsActivity.this,getString(R.string.collect_deleted));
+        ToastUtils.getInstance().showToast(MovieDetailsActivity.this, getString(R.string.collect_deleted));
     }
 
     @Override

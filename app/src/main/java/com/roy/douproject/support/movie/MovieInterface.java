@@ -1,4 +1,4 @@
-package com.roy.douproject.datainterface.movie;
+package com.roy.douproject.support.movie;
 
 import com.roy.douproject.bean.movie.JsonMovieBean;
 import com.roy.douproject.bean.movie.details.JsonDetailBean;

@@ -5,10 +5,9 @@ import com.roy.douproject.api.movie.DouMovieApi;
 import com.roy.douproject.bean.movie.JsonMovieBean;
 import com.roy.douproject.bean.movie.details.JsonDetailBean;
 import com.roy.douproject.bean.movie.star.JsonStarBean;
-import com.roy.douproject.datainterface.movie.MovieInterface;
+import com.roy.douproject.support.movie.MovieInterface;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 

@@ -1,4 +1,4 @@
-package com.roy.douproject.view.adapter.common;
+package com.roy.douproject.view.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +21,7 @@ import java.util.List;
 
 public class CollectionRecyclerAdapter extends SwipeMenuAdapter<CollectionRecyclerAdapter.ItemViewHolder> {
     private Context mContext;
+
     private List<MovieCollection> mMovieCollectionList = new ArrayList<>();
 
     private OnRecyclerViewItemClickListener mOnRecyclerViewItemClickListener;

@@ -1,4 +1,4 @@
-package com.roy.douproject.view.activity.movie.star;
+package com.roy.douproject.view;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,13 +16,11 @@ import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
 import com.roy.douproject.bean.movie.JsonMovieBean;
 import com.roy.douproject.bean.movie.details.JsonDetailBean;
-import com.roy.douproject.datainterface.movie.MovieInterface;
+import com.roy.douproject.support.movie.MovieInterface;
 import com.roy.douproject.presenter.movie.MoviePresenter;
 import com.roy.douproject.utils.common.SharedPreferencesUtil;
 import com.roy.douproject.utils.common.ThemePreference;
-import com.roy.douproject.view.activity.common.WebViewActivity;
-import com.roy.douproject.view.activity.movie.detail.MovieDetailsActivity;
-import com.roy.douproject.view.adapter.movie.star.MajorMovieRecyclerAdapter;
+import com.roy.douproject.view.adapter.MajorMovieRecyclerAdapter;
 import com.roy.douproject.bean.movie.star.JsonStarBean;
 import com.roy.douproject.bean.movie.star.Works;
 import com.roy.douproject.utils.common.LogUtils;
@@ -40,12 +38,11 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
  * Created by Administrator on 2017/3/13.
  */
 
-public class StarDetailsActivity extends SwipeBackActivity implements MovieInterface{
+public class StarDetailsActivity extends SwipeBackActivity implements MovieInterface {
     private static final String TAG = StarDetailsActivity.class.getSimpleName();
-    private String starId;
-    private JsonStarBean mJsonStarBean;
 
     private RelativeLayout root_stardetails;
+    private SwipeBackLayout mSwipeBackLayout;
 
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
@@ -62,22 +59,28 @@ public class StarDetailsActivity extends SwipeBackActivity implements MovieInter
     private List<Works> mWorksList = new ArrayList<>();
     private MoviePresenter moviePresenter = new MoviePresenter(this);
 
-    private SwipeBackLayout mSwipeBackLayout;
+    private String starId;
+    private JsonStarBean mJsonStarBean;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stardetails);
+
         progressDialog = new ProgressDialog(StarDetailsActivity.this);
         progressDialog.show();
+
         mSwipeBackLayout = getSwipeBackLayout();
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
         init();
     }
 
     private void init() {
         findView();
         initToolBar();
+        initView();
         if (getIntent() != null) {
             starId = getIntent().getStringExtra("starId");
         }
@@ -87,8 +90,6 @@ public class StarDetailsActivity extends SwipeBackActivity implements MovieInter
     }
 
     private void initToolBar() {
-        //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
-        //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setNavigationIcon(R.drawable.back_btn);
@@ -101,44 +102,52 @@ public class StarDetailsActivity extends SwipeBackActivity implements MovieInter
         });
     }
 
-    private void findView(){
+    private void findView() {
         root_stardetails = (RelativeLayout) findViewById(R.id.root_stardetails);
-        if(SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")){
-            root_stardetails.setBackgroundColor(getResources().getColor(R.color.protect_color));
-        }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         star_image = (ImageView) findViewById(R.id.star_image);
+
         star_name = (TextView) findViewById(R.id.star_name);
         star_en_name = (TextView) findViewById(R.id.star_en_name);
         star_gender = (TextView) findViewById(R.id.star_gender);
         star_born_place = (TextView) findViewById(R.id.star_born_place);
+
         major_movie = (RecyclerView) findViewById(R.id.major_movie);
+
         star_more_details = (Button) findViewById(R.id.star_more_details);
 
-        major_movie.setLayoutManager(new GridLayoutManager(StarDetailsActivity.this,3));
-        SpacesItemDecoration spacesItemDecoration = new SpacesItemDecoration(ScreenUtils.dipToPx(StarDetailsActivity.this, 10), ScreenUtils.dipToPx(StarDetailsActivity.this, 10), ScreenUtils.dipToPx(StarDetailsActivity.this, 10), 0);
-        major_movie.addItemDecoration(spacesItemDecoration);
-
-        mMajorMovieRecyclerAdapter = new MajorMovieRecyclerAdapter(StarDetailsActivity.this,mWorksList);
-        major_movie.setAdapter(mMajorMovieRecyclerAdapter);
     }
 
-    private void initData(){
+    private void initView() {
+        major_movie.setLayoutManager(new GridLayoutManager(StarDetailsActivity.this, 3));
+        SpacesItemDecoration spacesItemDecoration = new SpacesItemDecoration(ScreenUtils.dipToPx(StarDetailsActivity.this, 10), ScreenUtils.dipToPx(StarDetailsActivity.this, 10), ScreenUtils.dipToPx(StarDetailsActivity.this, 10), 0);
+        major_movie.addItemDecoration(spacesItemDecoration);
+        mMajorMovieRecyclerAdapter = new MajorMovieRecyclerAdapter(StarDetailsActivity.this, mWorksList);
+        major_movie.setAdapter(mMajorMovieRecyclerAdapter);
+
+        if (SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")) {
+            root_stardetails.setBackgroundColor(getResources().getColor(R.color.protect_color));
+        }
+    }
+
+    private void initData() {
         toolbar.setTitle(mJsonStarBean.getName());
-        ImageUtils.getInstance().displayImage(StarDetailsActivity.this,mJsonStarBean.getAvatars().getLarge(),star_image);
-        star_name.setText("中文名："+mJsonStarBean.getName());
-        star_en_name.setText("英文名："+mJsonStarBean.getName_en());
-        star_gender.setText("性别："+mJsonStarBean.getGender());
-        star_born_place.setText("出生地："+mJsonStarBean.getBorn_place());
+        ImageUtils.getInstance().displayImage(StarDetailsActivity.this, mJsonStarBean.getAvatars().getLarge(), star_image);
+        star_name.setText("中文名：" + mJsonStarBean.getName());
+        star_en_name.setText("英文名：" + mJsonStarBean.getName_en());
+        star_gender.setText("性别：" + mJsonStarBean.getGender());
+        star_born_place.setText("出生地：" + mJsonStarBean.getBorn_place());
         mWorksList.addAll(mJsonStarBean.getWorks());
         mMajorMovieRecyclerAdapter.notifyDataSetChanged();
+
         mMajorMovieRecyclerAdapter.setOnRecyclerViewItemClickListener(new MajorMovieRecyclerAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                LogUtils.log(TAG,mWorksList.get(position).getSubject().getId(),LogUtils.DEBUG);
+                LogUtils.log(TAG, mWorksList.get(position).getSubject().getId(), LogUtils.DEBUG);
                 Intent intent = new Intent();
-                intent.putExtra("movieId",mWorksList.get(position).getSubject().getId());
+                intent.putExtra("movieId", mWorksList.get(position).getSubject().getId());
                 intent.setClass(StarDetailsActivity.this, MovieDetailsActivity.class);
                 startActivity(intent);
             }

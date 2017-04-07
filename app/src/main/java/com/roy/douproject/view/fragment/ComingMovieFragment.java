@@ -1,12 +1,10 @@
-package com.roy.douproject.view.fragment.movie;
+package com.roy.douproject.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.ContentFrameLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,11 +18,11 @@ import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
 import com.roy.douproject.bean.movie.details.JsonDetailBean;
 import com.roy.douproject.bean.movie.star.JsonStarBean;
-import com.roy.douproject.datainterface.movie.MovieInterface;
-import com.roy.douproject.datainterface.other.OnProtectModeListener;
+import com.roy.douproject.support.movie.MovieInterface;
+import com.roy.douproject.support.listener.OnProtectModeListener;
 import com.roy.douproject.utils.common.SharedPreferencesUtil;
-import com.roy.douproject.view.activity.movie.detail.MovieDetailsActivity;
-import com.roy.douproject.view.adapter.movie.ComingMovieRecyclerAdapter;
+import com.roy.douproject.view.MovieDetailsActivity;
+import com.roy.douproject.view.adapter.ComingMovieRecyclerAdapter;
 import com.roy.douproject.bean.movie.JsonMovieBean;
 import com.roy.douproject.bean.movie.Subjects;
 import com.roy.douproject.presenter.movie.MoviePresenter;
@@ -42,20 +40,22 @@ import java.util.List;
 public class ComingMovieFragment extends Fragment implements MovieInterface, OnProtectModeListener {
     private static final String TAG = ComingMovieFragment.class.getSimpleName();
     private static final int PAGESIZE = 20;
-    private int pageCount;
+
 
     private RelativeLayout root_comingmovie;
-
     private RecyclerView movie_recyclerView;
     private TextView comingmovie_tip;
     private SwipeRefreshLayout comingmovie_refresh;
-    private boolean isLoadMore = false;
-    private boolean canLoadMore = true;
+
 
     private ComingMovieRecyclerAdapter mComingMovieRecyclerAdapter;
     private List<Subjects> mSubjectsList = new ArrayList<>();
     private MoviePresenter moviePresenter = new MoviePresenter(this);
 
+    private int pageCount;
+
+    private boolean isLoadMore = false;
+    private boolean canLoadMore = true;
 
     public static ComingMovieFragment newInstance() {
 
@@ -75,8 +75,21 @@ public class ComingMovieFragment extends Fragment implements MovieInterface, OnP
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        init();
+    }
+
+    private void init() {
+        findView();
         initView();
         initData();
+        initEvent();
+    }
+
+    private void findView() {
+        root_comingmovie = (RelativeLayout) getActivity().findViewById(R.id.root_comingmovie);
+        comingmovie_tip = (TextView) getActivity().findViewById(R.id.comingmovie_tip);
+        comingmovie_refresh = (SwipeRefreshLayout) getActivity().findViewById(R.id.comingmovie_refresh);
+        movie_recyclerView = (RecyclerView) getActivity().findViewById(R.id.comingmovie_recyclerView);
     }
 
     private void initData() {
@@ -85,27 +98,24 @@ public class ComingMovieFragment extends Fragment implements MovieInterface, OnP
 
 
     private void initView() {
-        root_comingmovie = (RelativeLayout) getActivity().findViewById(R.id.root_comingmovie);
-        comingmovie_tip = (TextView) getActivity().findViewById(R.id.comingmovie_tip);
-        comingmovie_refresh = (SwipeRefreshLayout) getActivity().findViewById(R.id.comingmovie_refresh);
-        movie_recyclerView = (RecyclerView) getActivity().findViewById(R.id.comingmovie_recyclerView);
-        if (SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")) {
-            root_comingmovie.setBackgroundColor(getResources().getColor(R.color.protect_color));
-            movie_recyclerView.setBackgroundColor(getResources().getColor(R.color.protect_color));
-        }
-
-
         movie_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         SpacesItemDecoration spacesItemDecoration = new SpacesItemDecoration(ScreenUtils.dipToPx(getActivity(), 10), ScreenUtils.dipToPx(getActivity(), 10), ScreenUtils.dipToPx(getActivity(), 10), 0);
         movie_recyclerView.addItemDecoration(spacesItemDecoration);
         mComingMovieRecyclerAdapter = new ComingMovieRecyclerAdapter(getActivity(), mSubjectsList);
         movie_recyclerView.setAdapter(mComingMovieRecyclerAdapter);
-        mComingMovieRecyclerAdapter.setOnRecyclerViewItemClickListener(recyclerViewItemClickListener);
-
-        mComingMovieRecyclerAdapter.setOnRecyclerViewLoadMoreListener(movie_recyclerView, recyclerViewLoadMoreListener);
 
         comingmovie_refresh.setColorSchemeColors(getResources().getColor(android.R.color.holo_blue_bright), getResources().getColor(android.R.color.holo_green_light),
                 getResources().getColor(android.R.color.holo_orange_light), getResources().getColor(android.R.color.holo_red_light));
+
+        if (SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")) {
+            root_comingmovie.setBackgroundColor(getResources().getColor(R.color.protect_color));
+            movie_recyclerView.setBackgroundColor(getResources().getColor(R.color.protect_color));
+        }
+    }
+
+    private void initEvent() {
+        mComingMovieRecyclerAdapter.setOnRecyclerViewItemClickListener(recyclerViewItemClickListener);
+        mComingMovieRecyclerAdapter.setOnRecyclerViewLoadMoreListener(movie_recyclerView, recyclerViewLoadMoreListener);
         comingmovie_refresh.setOnRefreshListener(refreshListener);
         DouKit.addOnProtectModeListener(this);
     }
@@ -245,7 +255,7 @@ public class ComingMovieFragment extends Fragment implements MovieInterface, OnP
 
     @Override
     public void modeChanged(boolean isOpen) {
-        LogUtils.log(TAG,"added:"+isAdded(),LogUtils.DEBUG);
+        LogUtils.log(TAG, "added:" + isAdded(), LogUtils.DEBUG);
         if (isAdded()) {
             if (isOpen) {
                 root_comingmovie.setBackgroundColor(getResources().getColor(R.color.protect_color));

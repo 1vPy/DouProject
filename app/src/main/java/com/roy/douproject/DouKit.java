@@ -2,17 +2,15 @@ package com.roy.douproject;
 
 import android.content.Context;
 
-import com.roy.douproject.bean.movie.Subjects;
 import com.roy.douproject.bean.other.User;
-import com.roy.douproject.datainterface.other.OnProtectModeListener;
-import com.roy.douproject.datainterface.other.OnThemeChangeListener;
-import com.roy.douproject.widget.ColorDialog;
+import com.roy.douproject.support.listener.OnProtectModeListener;
+import com.roy.douproject.support.listener.OnThemeChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/2/16.
+ * Created by 1vPy(Roy) on 2017/2/16.
  */
 
 public class DouKit {

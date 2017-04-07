@@ -32,7 +32,7 @@
             android:value="GlideModule" />
 
         <activity
-            android:name=".view.activity.MainActivity"
+            android:name=".view.MainActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/NoTitleBarTheme">
             <intent-filter>
@@ -43,40 +43,40 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".view.activity.common.SearchActivity" />
+                android:value=".view.SearchActivity" />
         </activity>
 
         <activity
-            android:name=".view.activity.WelcomeActivity"
+            android:name=".view.WelcomeActivity"
             android:screenOrientation="sensorPortrait" />
 
         <activity
-            android:name=".view.activity.movie.detail.MovieDetailsActivity"
+            android:name=".view.MovieDetailsActivity"
             android:screenOrientation="sensorPortrait" />
 
         <activity
-            android:name=".view.activity.movie.star.StarDetailsActivity"
+            android:name=".view.StarDetailsActivity"
             android:screenOrientation="sensorPortrait" />
 
         <activity
-            android:name=".view.activity.common.WebViewActivity"
+            android:name=".view.WebViewActivity"
             android:screenOrientation="sensorPortrait" />
 
         <activity
-            android:name=".view.activity.common.LoginActivity"
+            android:name=".view.LoginActivity"
             android:screenOrientation="sensorPortrait" />
 
         <activity
-            android:name=".view.activity.common.PersonCenterActivity"
+            android:name=".view.PersonCenterActivity"
             android:screenOrientation="sensorPortrait" />
 
         <activity
-            android:name=".view.activity.common.SearchActivity"
-            android:parentActivityName=".view.activity.MainActivity"
+            android:name=".view.SearchActivity"
+            android:parentActivityName=".view.MainActivity"
             android:screenOrientation="sensorPortrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.activity.MainActivity" />
+                android:value=".view.MainActivity" />
             <!-- meta tag and intent filter go into results activity -->
             <meta-data
                 android:name="android.app.searchable"
@@ -88,11 +88,11 @@
         </activity>
 
         <activity
-            android:name=".view.activity.common.CollectionActivity"
+            android:name=".view.CollectionActivity"
             android:screenOrientation="sensorPortrait" />
 
         <activity
-            android:name=".view.activity.common.SettingActivity"
+            android:name=".view.SettingActivity"
             android:screenOrientation="sensorPortrait" />
     </application>
 

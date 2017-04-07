@@ -1,4 +1,4 @@
-package com.roy.douproject.view.adapter.movie;
+package com.roy.douproject.view.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,12 +28,17 @@ import java.util.List;
 
 public class ComingMovieRecyclerAdapter extends RecyclerView.Adapter {
     private static final String TAG = ComingMovieRecyclerAdapter.class.getSimpleName();
+
     private static final int VIEW_ITEM = 0;
     private static final int VIEW_PROG = 1;
+
     private Context mContext;
+
     private List<Subjects> mSubjectsList = new ArrayList<>();
+
     private OnRecyclerViewItemClickListener mOnRecyclerViewItemClickListener;
     private OnRecyclerViewLoadMoreListener mOnRecyclerViewLoadMoreListener;
+
     private RecyclerView mRecyclerView;
 
     private boolean isLoading;

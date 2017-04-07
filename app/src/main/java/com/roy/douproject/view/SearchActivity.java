@@ -1,9 +1,8 @@
-package com.roy.douproject.view.activity.common;
+package com.roy.douproject.view;
 
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,13 +15,11 @@ import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
 import com.roy.douproject.bean.movie.details.JsonDetailBean;
 import com.roy.douproject.bean.movie.star.JsonStarBean;
-import com.roy.douproject.datainterface.movie.MovieInterface;
+import com.roy.douproject.support.movie.MovieInterface;
 import com.roy.douproject.presenter.movie.MoviePresenter;
 import com.roy.douproject.utils.common.SharedPreferencesUtil;
 import com.roy.douproject.utils.common.ThemePreference;
-import com.roy.douproject.view.activity.movie.detail.MovieDetailsActivity;
 import com.roy.douproject.view.adapter.SearchResultAdapter;
-import com.roy.douproject.api.ApiFactory;
 import com.roy.douproject.bean.movie.JsonMovieBean;
 import com.roy.douproject.bean.movie.Subjects;
 import com.roy.douproject.utils.common.LogUtils;
@@ -30,9 +27,6 @@ import com.roy.douproject.utils.common.LogUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
@@ -40,22 +34,25 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
  * Created by Administrator on 2017/3/17.
  */
 
-public class SearchActivity extends SwipeBackActivity implements MovieInterface{
+public class SearchActivity extends SwipeBackActivity implements MovieInterface {
     private static final String TAG = SearchActivity.class.getSimpleName();
 
     private RelativeLayout root_search;
+    private SwipeBackLayout mSwipeBackLayout;
 
     private Toolbar toolbar;
+
     private ListView search_result;
 
-    private SearchResultAdapter mSearchResultAdapter;
-    private List<Subjects> mSubjectsList = new ArrayList<>();
     private TextView search_tip;
+
+    private SearchResultAdapter mSearchResultAdapter;
+
+    private List<Subjects> mSubjectsList = new ArrayList<>();
 
     private String query;
     private MoviePresenter moviePresenter = new MoviePresenter(this);
 
-    private SwipeBackLayout mSwipeBackLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,10 +89,8 @@ public class SearchActivity extends SwipeBackActivity implements MovieInterface{
     }
 
     private void initToolBar() {
-        //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
-        //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
-        toolbar.setTitle("搜索结果");
         setSupportActionBar(toolbar);
+        toolbar.setTitle("搜索结果");
         toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setNavigationIcon(R.drawable.back_btn);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
@@ -111,17 +106,16 @@ public class SearchActivity extends SwipeBackActivity implements MovieInterface{
         root_search = (RelativeLayout) findViewById(R.id.root_search);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         search_result = (ListView) findViewById(R.id.search_result);
-        if(SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")){
-            search_result.setBackgroundColor(getResources().getColor(R.color.protect_color));
-            root_search.setBackgroundColor(getResources().getColor(R.color.protect_color));
-        }
-
         search_tip = (TextView) findViewById(R.id.search_tip);
     }
 
     private void initView() {
         mSearchResultAdapter = new SearchResultAdapter(SearchActivity.this, mSubjectsList);
         search_result.setAdapter(mSearchResultAdapter);
+        if (SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")) {
+            search_result.setBackgroundColor(getResources().getColor(R.color.protect_color));
+            root_search.setBackgroundColor(getResources().getColor(R.color.protect_color));
+        }
     }
 
     private void initEvent() {

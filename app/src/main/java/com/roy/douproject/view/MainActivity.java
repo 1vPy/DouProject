@@ -1,14 +1,12 @@
-package com.roy.douproject.view.activity;
+package com.roy.douproject.view;
 
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,8 +24,6 @@ import android.widget.ImageView;
 import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.ButtonPlaceAlignmentEnum;
 import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
-import com.nightonke.boommenu.BoomButtons.HamButton;
-import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.ButtonEnum;
@@ -35,13 +31,10 @@ import com.nightonke.boommenu.OnBoomListener;
 import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
-import com.roy.douproject.datainterface.other.OnThemeChangeListener;
+import com.roy.douproject.support.listener.OnThemeChangeListener;
 import com.roy.douproject.utils.common.ScreenUtils;
 import com.roy.douproject.utils.common.ThemePreference;
 import com.roy.douproject.utils.common.ToastUtils;
-import com.roy.douproject.view.activity.common.CollectionActivity;
-import com.roy.douproject.view.activity.common.LoginActivity;
-import com.roy.douproject.view.activity.common.SettingActivity;
 import com.roy.douproject.view.adapter.DouBaseFragmentAdapter;
 import com.roy.douproject.view.fragment.MovieFragment;
 import com.roy.douproject.utils.common.LogUtils;
@@ -51,27 +44,29 @@ import com.roy.douproject.widget.ColorDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity implements OnThemeChangeListener{
     private static final String TAG = MainActivity.class.getSimpleName();
+
     private DrawerLayout drawerLayout_main;
+
     private Toolbar toolbar;
+    private ViewPager viewPager;
+
     private NavigationView navigationView_main;
     private ImageView user_header;
+    private View root_nav;
+    private SearchView searchView;
+
     private Button setting;
     private Button personal_center;
-    //private TabLayout tabs;
+    private BoomMenuButton bmb;
 
-    private ViewPager viewPager;
+
     private DouBaseFragmentAdapter mDouBaseFragmentAdapter;
-
     private List<String> mTitleList = new ArrayList<>();
     private List<Fragment> mFragmentList = new ArrayList<>();
     private MovieFragment mMovieFragment;
 
-    private SearchView searchView;
-
-    private BoomMenuButton bmb;
     private int[] imgText = {R.string.back_top, R.string.collect_succeed};
     private int[] imgs = {R.drawable.back_to_top, R.drawable.star_full};
 
@@ -94,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements OnThemeChangeList
     }
 
     private void initToolBar() {
-        //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
-        //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
         toolbar.setTitle(getString(R.string.app_name));
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
@@ -109,36 +102,33 @@ public class MainActivity extends AppCompatActivity implements OnThemeChangeList
 
 
     private void findView() {
-        //tabs = (TabLayout) findViewById(R.id.tabs);
         drawerLayout_main = (DrawerLayout) findViewById(R.id.drawerLayout_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationView_main = (NavigationView) findViewById(R.id.navigationView_main);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setting = (Button) findViewById(R.id.setting);
         personal_center = (Button) findViewById(R.id.personsl_center);
-
         bmb = (BoomMenuButton) findViewById(R.id.bmb);
     }
 
     private void initView() {
-        navigationView_main.inflateHeaderView(R.layout.nav_header);
+        root_nav = navigationView_main.inflateHeaderView(R.layout.nav_header);
         navigationView_main.inflateMenu(R.menu.sidebar_menu);
         navigationView_main.setItemIconTintList(getResources().getColorStateList(android.R.color.black));
         navigationView_main.setItemBackgroundResource(android.R.color.transparent);
         navigationView_main.setItemTextColor(getResources().getColorStateList(android.R.color.black));
-        onNavgationViewMenuItemSelected(navigationView_main);
+        root_nav.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
 
+        onNavgationViewMenuItemSelected(navigationView_main);
 
         user_header = (ImageView) navigationView_main.getHeaderView(0).findViewById(R.id.user_header);
         ImageUtils.getInstance().displayCircleImage(MainActivity.this, R.drawable.user_header, user_header);
 
-
-        // 设置Drawerlayout开关指示器，即Toolbar最左边的那个icon
         ActionBarDrawerToggle mActionBarDrawerToggle =
                 new ActionBarDrawerToggle(this, drawerLayout_main, toolbar, R.string.open, R.string.close);
         mActionBarDrawerToggle.syncState();
-        drawerLayout_main.setDrawerListener(mActionBarDrawerToggle);
-
+        drawerLayout_main.addDrawerListener(mActionBarDrawerToggle);
+        drawerLayout_main.setScrimColor(getResources().getColor(android.R.color.transparent));
     }
 
     private void initFragment() {
@@ -190,8 +180,6 @@ public class MainActivity extends AppCompatActivity implements OnThemeChangeList
                 (SearchView) menu.findItem(R.id.movie_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-        //searchView.setIconifiedByDefault(false);
-        //searchView.setIconified(false);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -341,5 +329,6 @@ public class MainActivity extends AppCompatActivity implements OnThemeChangeList
     @Override
     public void themeChanged(int color) {
         toolbar.setBackgroundColor(color);
+        root_nav.setBackgroundColor(color);
     }
 }

@@ -1,4 +1,4 @@
-package com.roy.douproject.view.activity;
+package com.roy.douproject.view;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,16 +11,17 @@ import com.roy.douproject.utils.image.ImageUtils;
 
 
 /**
- * Created by Administrator on 2017/3/1.
+ * Created by 1vPy(Roy) on 2017/3/1.
+ * 应用第一个过渡Activity,在MainActivity加载后加载;
+ * 随机加载一个过渡图片;
  */
 
 public class WelcomeActivity extends Activity {
     private int[] pics = {R.drawable.pic_1,R.drawable.pic_2,R.drawable.pic_3};
-    private ImageView welcome_pic;
+    private ImageView ivWelcomePic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //DouMovieFactory.newInstance().createApi().getHotMovie();
         setContentView(R.layout.activity_welcome);
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -28,9 +29,9 @@ public class WelcomeActivity extends Activity {
                 WelcomeActivity.this.finish();
             }
         },3000);
-        welcome_pic = (ImageView) findViewById(R.id.welcome_pic);
-        ImageUtils.getInstance().displayImage(WelcomeActivity.this,pics[(int)(Math.random()*pics.length)],welcome_pic);
-        //welcome_pic.setImageResource(pics[(int)(Math.random()*pics.length)]);
+        ivWelcomePic = (ImageView) findViewById(R.id.ivWelcomePic);
+        //ImageUtils.getInstance().displayImage(WelcomeActivity.this,pics[(int)(Math.random()*pics.length)],welcome_pic);
+        ivWelcomePic.setImageResource(pics[(int)(Math.random()*pics.length)]);
     }
 
     @Override

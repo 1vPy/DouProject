@@ -1,4 +1,4 @@
-package com.roy.douproject.view.activity.common;
+package com.roy.douproject.view;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 
 import com.roy.douproject.DouKit;
 import com.roy.douproject.R;
-import com.roy.douproject.datainterface.other.OnProtectModeListener;
+import com.roy.douproject.support.listener.OnProtectModeListener;
 import com.roy.douproject.utils.common.LogUtils;
 import com.roy.douproject.utils.common.SharedPreferencesUtil;
 import com.roy.douproject.utils.common.ThemePreference;
@@ -24,8 +24,9 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 public class SettingActivity extends SwipeBackActivity {
     private static final String TAG = SettingActivity.class.getSimpleName();
-    private SwipeBackLayout mSwipeBackLayout;
+
     private LinearLayout root_setting;
+    private SwipeBackLayout mSwipeBackLayout;
 
     private Toolbar toolbar;
 
@@ -44,18 +45,21 @@ public class SettingActivity extends SwipeBackActivity {
     private void init() {
         findView();
         initToolBar();
+        initView();
         initEvent();
     }
 
     private void findView() {
         root_setting = (LinearLayout) findViewById(R.id.root_setting);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         synchronization = (SwitchButton) findViewById(R.id.synchronization);
         protect = (SwitchButton) findViewById(R.id.protect);
+    }
+
+    private void initView(){
         synchronization.setCheck(false);
         protect.setCheck(false);
-
-
         if (SharedPreferencesUtil.getSharedPreferencesUtil(DouKit.getContext()).readBoolean("ProtectMode")) {
             root_setting.setBackgroundColor(getResources().getColor(R.color.protect_color));
             protect.setCheck(true);
@@ -68,13 +72,11 @@ public class SettingActivity extends SwipeBackActivity {
     }
 
     private void initToolBar() {
-        //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
-        //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
+        setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.setting));
         toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         toolbar.setNavigationIcon(R.drawable.back_btn);
-        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

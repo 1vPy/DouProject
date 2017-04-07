@@ -11,12 +11,30 @@ import retrofit2.http.Query;
  */
 
 public interface OtherApi {
+
+    /**
+     * 账号查询
+     * @param username
+     * @return
+     */
     @GET("check")
     Observable<Results> checkUser(@Query("username") String username);
 
+    /**
+     * 用户注册
+     * @param username
+     * @param password
+     * @return
+     */
     @GET("register")
     Observable<Results> register(@Query("username") String username,@Query("password") String password);
 
+    /**
+     * 用户登录
+     * @param username
+     * @param password
+     * @return
+     */
     @GET("login")
     Observable<Results> login(@Query("username") String username,@Query("password") String password);
 

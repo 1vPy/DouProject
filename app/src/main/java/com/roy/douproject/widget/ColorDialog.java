@@ -14,7 +14,7 @@ import com.roy.douproject.R;
 import com.roy.douproject.utils.common.ThemePreference;
 
 /**
- * Created by Administrator on 2016/11/30.
+ * Created by 1vPy(Roy) on 2016/11/30.
  */
 
 public class ColorDialog extends Dialog {

@@ -9,7 +9,7 @@ import com.roy.douproject.utils.common.LogUtils;
 import cn.smssdk.SMSSDK;
 
 /**
- * Created by Administrator on 2017/2/16.
+ * Created by 1vPy(Roy) on 2017/2/16.
  */
 
 public class DouApplication extends Application {

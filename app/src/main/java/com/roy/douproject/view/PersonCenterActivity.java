@@ -1,14 +1,12 @@
-package com.roy.douproject.view.activity.common;
+package com.roy.douproject.view;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,8 +24,8 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
  */
 
 public class PersonCenterActivity extends SwipeBackActivity {
-    private Toolbar toolbar;
     private RelativeLayout user_info_setting;
+    private Toolbar toolbar;
     private ImageView user_header_img;
     private TextView user_name;
     private Button logout;
@@ -53,10 +51,8 @@ public class PersonCenterActivity extends SwipeBackActivity {
     }
 
     private void initToolBar() {
-        //toolbar.setBackgroundColor(preferencesUtil.readInt("app_color"));
-        //toolbar.setSubtitleTextColor(preferencesUtil.readInt("app_color"));
-        toolbar.setTitle(getString(R.string.personal_center));
         setSupportActionBar(toolbar);
+        toolbar.setTitle(getString(R.string.personal_center));
         toolbar.setBackgroundColor(ThemePreference.getThemePreference(DouKit.getContext()).readTheme());
         toolbar.setNavigationIcon(R.drawable.back_btn);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));

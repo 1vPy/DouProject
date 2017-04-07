@@ -3,10 +3,9 @@ package com.roy.douproject.presenter.other;
 import com.roy.douproject.api.ApiFactory;
 import com.roy.douproject.api.other.OtherApi;
 import com.roy.douproject.bean.other.Results;
-import com.roy.douproject.datainterface.other.OtherInterface;
+import com.roy.douproject.support.other.OtherInterface;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
