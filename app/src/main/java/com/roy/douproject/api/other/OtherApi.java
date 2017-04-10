@@ -29,12 +29,6 @@ public interface OtherApi {
     @GET("register")
     Observable<Results> register(@Query("username") String username,@Query("password") String password);
 
-    /**
-     * 用户登录
-     * @param username
-     * @param password
-     * @return
-     */
     @GET("login")
     Observable<Results> login(@Query("username") String username,@Query("password") String password);
 
