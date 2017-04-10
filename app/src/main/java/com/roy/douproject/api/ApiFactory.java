@@ -1,9 +1,7 @@
 package com.roy.douproject.api;
 
 import com.roy.douproject.api.movie.DouMovieApi;
-import com.roy.douproject.api.movie.DouRetrofit;
 import com.roy.douproject.api.other.OtherApi;
-import com.roy.douproject.api.other.OtherRetrofit;
 
 /**
  * Created by Administrator on 2017/3/8.

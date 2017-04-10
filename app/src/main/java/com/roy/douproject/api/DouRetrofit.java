@@ -1,4 +1,4 @@
-package com.roy.douproject.api.movie;
+package com.roy.douproject.api;
 
 import com.roy.douproject.DouKit;
 import com.roy.douproject.api.movie.DouMovieApi;
