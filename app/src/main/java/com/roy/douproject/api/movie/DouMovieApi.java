@@ -49,7 +49,7 @@ public interface DouMovieApi {
     Observable<JsonMovieBean> searchMovie(@Query("q") String query);
 
     /**
-     * 演员查询
+     * 演员查询1
      * @param id
      * @return
      */
