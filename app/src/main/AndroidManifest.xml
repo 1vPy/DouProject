@@ -22,10 +22,10 @@
         android:theme="@style/NoTitleBarTranslucentTheme">
         <meta-data
             android:name="sms_app_key"
-            android:value="f48c49b37b60" />
+            android:value="*******" />
         <meta-data
             android:name="sms_app_secret"
-            android:value="d953d34d33e672460174961e63687304" />
+            android:value="*******" />
 
         <meta-data
             android:name="com.roy.douproject.utils.image.GlideModuleSetting"
